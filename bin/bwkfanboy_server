@@ -1,0 +1,111 @@
+#!/usr/bin/env ruby19
+# -*-ruby-*-
+
+require 'webrick'
+require_relative '../lib/bwkfanboy/utils'
+
+$conf = {
+  addr: '127.0.0.1',
+  port: 9042,
+  converter: "./#{Bwkfanboy::Meta::NAME}",
+  banner: "Usage: #{File.basename($0)} [options]",
+  server_type: WEBrick::SimpleServer,
+  workdir: File.dirname(File.expand_path($0)),
+  pidfile: "#{Bwkfanboy::Meta::DIR_TMP}/#{File.basename($0)}.pid",
+  log: "#{Bwkfanboy::Meta::DIR_LOG}/#{File.basename($0)}.log",
+  alog: "#{Bwkfanboy::Meta::DIR_LOG}/#{File.basename($0)}-access.log"
+}
+
+o = Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner]) # create OptionParser object
+o.on('-b VAL', 'BindAddress') { |i| $conf[:addr] = i }
+o.on('-p VAL', 'A port number') { |i| $conf[:mode] = i }
+o.on('-c VAL', "A path to main #{Bwkfanboy::Meta::NAME} executable") { |i| $conf[:mode] = i }
+o.on('-d', 'Detach from a terminal') {|i| $conf[:server_type] = WEBrick::Daemon }
+Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], o) # run cl parser
+
+Bwkfanboy::Utils.dir_tmp_create()
+
+class FeedServlet < WEBrick::HTTPServlet::AbstractServlet
+  def do_GET(req, res)
+    if req.query['p'] && req.query['p'] =~ /^[a-zA-Z0-9_]+$/
+      res['Content-Type'] = 'application/atom+xml; charset=UTF-8'
+      res['Content-Disposition'] = "inline; filename=\"#{Bwkfanboy::Meta::NAME}-#{req.query['p']}.xml"
+
+      cmd = "#{$conf[:converter]} #{req.query['p']}"
+      r = Bwkfanboy::Utils.cmd_run(cmd)
+      if r[0] != 0 then
+        raise WEBrick::HTTPStatus::InternalServerError.new("Errors in the pipeline:\n\n #{r[1]}")
+      end
+      
+      res.body = r[2]
+    else
+      raise WEBrick::HTTPStatus::InternalServerError.new("Parameter 'p' required")
+    end
+  end
+end
+
+class FeedListServlet < WEBrick::HTTPServlet::AbstractServlet
+  def do_GET(req, res)
+      cmd = "#{$conf[:converter]} -l"
+      r = Bwkfanboy::Utils.cmd_run(cmd)
+      if r[0] != 0 then
+        raise WEBrick::HTTPStatus::InternalServerError.new("Errors:\n\n #{r[1]}")
+      end
+      
+      res.body = r[2]
+  end
+end
+
+# create temporally files
+def start_callback()
+  Dir.chdir($conf[:workdir])
+  if ! File.executable?($conf[:converter]) then
+    Bwkfanboy::Utils.errx(1, "Missing executable file '#{$conf[:converter]}'")
+  end
+  
+  begin
+    File.open($conf[:pidfile], "w+") {|i| i.puts $$ }
+  rescue
+    Bwkfanboy::Utils.warnx("unable to create a pidfile " + $conf[:pidfile])
+  end
+end
+
+# remove temporally files
+def stop_callback()
+  begin
+    File.unlink $conf[:pidfile]
+  rescue
+    # ignore errors
+  end
+end
+
+def log_create(f)
+  begin
+    log = Logger.new(f, 2, Bwkfanboy::Meta::LOG_MAXSIZE)
+  rescue
+    Bwkfanboy::Utils.warnx("cannot open log #{f}");
+    return nil
+  end
+  log.datetime_format = "%H:%M:%S"
+  log
+end
+
+# ----------------------------------------------------------------------
+
+server_log = log_create($conf[:log])
+access_log = [[ log_create($conf[:alog]), WEBrick::AccessLog::COMBINED_LOG_FORMAT ]]
+
+s = WEBrick::HTTPServer.new(Port: $conf[:port],
+                            BindAddress: $conf[:addr],
+                            ServerType: $conf[:server_type],
+                            StartCallback: -> {start_callback},
+                            StopCallback: -> {stop_callback},
+                            Logger: server_log,
+                            AccessLog: access_log
+                            )
+s.mount("/", FeedServlet)
+s.mount("/list", FeedListServlet)
+['TERM', 'INT'].each {|i|
+  trap(i) { s.shutdown }
+}
+s.start

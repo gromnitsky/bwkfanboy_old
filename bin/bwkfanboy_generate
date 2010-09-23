@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby19
+# -*-ruby-*-
+
+require 'rss/maker'
+require 'date'
+require 'json'
+
+require_relative '../lib/bwkfanboy/utils'
+
+$conf = { banner: "Usage: #{File.basename($0)} [options] < json" }
+
+Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], nil, true)
+
+# TODO white JSON schema and validate stdin
+begin
+  j = JSON.parse(STDIN.read)
+rescue
+  Bwkfanboy::Utils.errx(1, "stdin had invalid JSON");
+end
+
+feed = RSS::Maker.make("atom") { |maker|
+  maker.channel.id = j['channel']['id']
+  maker.channel.updated = j['channel']['updated']
+  maker.channel.author = j['channel']['author']
+  maker.channel.title = j['channel']['title']
+  maker.channel.link = j['channel']['link']
+
+  maker.items.do_sort = true
+
+  j['x_entries'].each { |i|
+    maker.items.new_item do |item|
+      item.link = i['link']
+      item.title = i['title']
+      item.updated = i['updated']
+      item.content.type = j['channel']['x_entries_content_type']
+      
+      case item.content.type
+      when 'text'
+        item.content.content = i['content']
+      when 'html'
+        item.content.content = i['content']
+      else
+        item.content.xhtml = i['content']
+      end
+    end
+  }
+}
+
+puts feed

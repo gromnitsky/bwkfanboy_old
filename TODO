@@ -1,0 +1,20 @@
+-*-text-*-
+
+0.0.2
+-----
+
+- Add plugin listing to bwkfanboy_server.
+
+0.0.1
+-----
+
++ Atom feed generator.
++ WEBrick servlet and CGI script.
++ pid file for WEBrick servlet
++ Log.
+- Write doc for Parser class.
+- Documentation for bin/ scripts.
++ "HOWTO write a plugin".
+- Plugin for /usr/local/ports/UPDATE.
+- Tests.
+- import to git

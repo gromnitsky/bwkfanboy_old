@@ -1,0 +1,120 @@
+$Id$ -*-text-*-
+
+= HOWTO Write a \Plugin
+
+First of all, look at examples provided with bwkfanboy. They were
+intended to be 100% working because I was writing them for myself.
+
+Basically, all you need is to write a class named _Page_ that
+inherits this class Bwkfanboy::Parse, override in the child #myparse
+method and write a simple module named _Meta_ inside your _Page_
+class.
+
+== Skeleton
+
+Here is a skeleton of a plugin:
+
+  require 'nokogiri'
+ 
+  class Page < Bwkfanboy::Parse
+    module Meta
+      URI = 'http://example.org/news'
+      ENC = 'UTF-8'
+      VERSION = 1
+      COPYRIGHT = '(c) 2010 John Doe'
+      TITLE = "News from example.org"
+      CONTENT_TYPE = 'html'
+    end
+ 
+    def myparse()
+      # read stdin and parse it
+      doc = Nokogiri::HTML(STDIN, nil, Meta::ENC)
+      doc.xpath("XPATH QUERY").each {|i|
+        t = clean(i.xpath("XPATH QUERY").text())
+        l = clean(i.xpath("XPATH QUERY").text())
+        u = date(i.xpath("XPATH QUERY").text())
+        a = clean(i.xpath("XPATH QUERY").text())
+        c = clean(i.xpath("XPATH QUERY").text())
+ 
+        self << { title: t, link: l, updated: u, author: a, content: c }
+      }
+    end
+  end
+
+As you see, we are using Nokogiri for HTML parsing. You are not
+required to use it too--take the parser whatever you like. Nokogiri
+is nice, because it's able to read a broken HTML and search thought
+it via XPath. If you would like to use, for example, REXML, beware
+that it loves only strict XML--you may need to clean the HTML with
+an external utility such as Tide.
+
+Bwkfanboy loads a plugin from 1 file as a valid Ruby code. It means
+that the plugin can contain *any* Ruby code, but doesn't mean that
+it should.
+
+=== \Meta
+
+Module _Meta_ can have only constants--and *all* constants listed in
+the skeleton are required.
+
+* <tt>URI</tt>--can be a <tt>http(s)://</tt> or <tt>ftp://</tt> URL
+  or just a path to a file on your local machine, as
+  <tt>/home/bob/huzza.html</tt>. This is the source that
+  bwkfanboy will be transforming to the Atom feed.
+
+* <tt>ENC</tt>--an encoding for URI.
+
+* <tt>VERSION</tt>--a version of a plugin.
+
+* <tt>COPYRIGHT</tt>--some boring string.
+
+* <tt>TITLE</tt>--a short description of the future feed. It'll be
+  used later in the resulting XML.
+
+* <tt>CONTENT_TYPE</tt>--one of +xhtml+, +html+ or +text+ values. This is
+  very important constant because it says in what format entries
+  will be placed in the feed. Usually it's safe to use +html+.
+
+=== myparse
+
+In #myparse method please read stdin. The contends of it is the raw
+HTML you want to parse. The general idea:
+
+* Atom feed must contain at least 1 entry, so look in HTML for some
+  crap which you break into 5 peaces: title of the entry, link for
+  it, a date for the entry, who is author of the entry and its
+  contents.
+
+* After you scan and grab 1 entry, create a hash and add it to
+  _self_ as it was in the skeleton:
+
+    self << { title: t, link: l, updated: u, author: a, content: c }
+
+  Here variables _t_, _l_, _u_, _a_ and _c_ contains the actual
+  values of 5 peaces for the entry. Names of the keys in hash are
+  important of course--don't invent your own.
+
+* There would be probably more crap in HTML that you can use to
+  construct another entry. Keep parsing and adding entries.
+
+* While you scanning, use the 2 helper methods for cleaning each
+  peace: \#clean, which removed duplicate spaces and #date, which
+  parses a sting and return a date in ISO8601 format. You may
+  override #date method if you like.
+
+== How to test all this
+
+To test how nice your plugin works, save the html page to the file
+and type:
+
+  % bwkparser_parse -vv path/to/a/plugin.rb < saved_page.html
+
+to see the result as in plain text, or
+
+  % bwkparser_parse -v path/to/a/plugin.rb < saved_page.html
+
+as pretty JSON.
+
+<tt>bwkparser_parse</tt> return 0 if no errors occurred or >= 1 if you
+have errors in your plugin code. N.B.: the output from
+<tt>bwkparser_parse</tt> is always in UTF-8.

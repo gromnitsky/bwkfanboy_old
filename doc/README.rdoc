@@ -1,0 +1,77 @@
+$Id$ -*-text-*-
+
+= About
+
+bwkfanboy is a HTML to Atom feed converter that you can use to watch
+sites that do not provide its own feed.
+
+The converter is not a magick tool: you'll need to write a plugin (in
+Ruby) for each site you want to watch. bwkfanboy provides guidelines and
+general assistance.
+
+= Architecture
+
+== Plugins
+
+bwkfanboy comes with 1 exmple plugin that parses a search page of
+dailyprincetonian.com looking for bwk's articles.
+
+The plugin is a Ruby class +Page+ that inherits Bwkfanboy::Parse
+parent, overriding 1 method.
+
+The plugins can be in the system
+
+  `gem env gemdir`/gems/bwkfanboy-x.y.z/lib/plugins
+
+or user's home
+
+  ~/.bwkfanboy/plugins
+
+directories.
+
+== Pipeline
+
+The program consists of 4 parts:
+
+0. *bwkfanboy* script that takes 1 parameter: the name of a file in
+   plugins directories (without the .rb suffix). So, for example to get
+   an atom feed from dailyprincetonian.com you type:
+
+     % bwkfanboy bwk
+
+   and it will load
+   <tt>/usr/local/lib/ruby/gems/1.9/bwkfanboy-0.0.1/lib/plugins/bwk.rb</tt>
+   file on my FreeBSD machine, fetch and parse html from
+   dailyprincetonian.com and generate the required feed, dumping it to
+   stdout.
+
+   The script is just a convinient wrapper for 3 separate utils.
+
+1. *bwkfanboy_fetch*
+
+   It reads 1 line from stdin for the URL to fetch from. The result will
+   be dumped to stdout in UTF-8.
+
+2. *bwkfanboy_parse*
+
+   It takes 1 parameter: <em>a full path</em> to a plugin file.
+
+   This util reads stdin expecting it to be a xhtml, parses it and dumps
+   the result to stdout in JSON-formatted object.
+
+3. *bwkfanboy_generate*
+
+   Doesn't take any command line parameters, just reads stdin expecting
+   it to be a proper JSON-formatted object.
+
+   The result will be an Atom feed dumped to stdout in UTF-8.
+
+So, without the wrapper all this together looks like:
+
+  % echo http://example.org | bwkfanboy_fetch | 
+  	bwkfanboy_parse /path/to/my/plugin.rb | bwkfanboy_generate
+
+== Log
+
+All utils write to <tt>/tmp/bwkfanboy.log</tt> file if permissions
+allows it.

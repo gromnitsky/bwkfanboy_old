@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby19
+# -*-ruby-*-
+
+require_relative '../lib/bwkfanboy/parser'
+
+$conf = {
+  banner: "Usage: #{File.basename($0)} [options] /path/to/my/plugin.rb < xml"
+}
+
+Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], nil, true)
+
+if ARGV.size == 0 then
+  abort($conf[:banner])
+else
+  Bwkfanboy::Utils.plugin_load(ARGV[0], Bwkfanboy::Meta::PLUGIN_CLASS)
+end;
+
+pn = Page.new()
+pn.check()
+pn.parse()
+
+if Bwkfanboy::Utils.cfg[:verbose] >= 2 then
+  pn.dump()
+else
+  puts pn.to_json()
+end

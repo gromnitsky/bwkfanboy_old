@@ -1,0 +1,115 @@
+#!/usr/bin/env ruby19
+# -*-ruby-*-
+
+require_relative '../lib/bwkfanboy/parser'
+
+$conf = {
+  prog_name: 'bwkfanboy',
+  prog_ver: '0.0.1',
+  mode: 'pipe',
+  banner: "Usage: #{File.basename($0)} [options] plugin-name"
+}
+
+class Plugin
+  attr_reader :name, :path
+  
+  def initialize(name)
+    @name = name
+    @path = nil
+  end
+
+  def dirs()
+    # try to create user's home plugin directory
+    begin
+      ['~/.bwkfanboy', '~/.bwkfanboy/plugins'].each {|i|
+        Dir.mkdir(File.expand_path(i))
+      }
+    rescue
+      # empty
+    end
+    
+    # go to the directory with current script
+    Dir.chdir(File.dirname(File.expand_path($0)))
+
+    r = []
+    dirs = ['../lib/plugins', '~/.bwkfanboy/plugins']
+    begin
+      # this will fail for user's home directory under Apache CGI
+      # environment
+      dirs.map! {|i| File.expand_path(i) }
+    rescue
+    end
+    dirs.each {|i|
+      if File.readable?(i) then
+        r << i
+      else
+        Bwkfanboy::Utils.warnx("directory #{i} isn't readable");
+      end
+    }
+
+    if r.length == 0 then
+      Bwkfanboy::Utils.errx(1, "no dirs for plugins found: #{dirs.join(' ')}")
+    end
+    return r
+  end
+
+  def load()
+    abort($conf[:banner]) unless (@name && @name !~ /^\s*$/)
+
+    dirs.each {|i|
+      files = Dir.glob("#{i}/*.rb")
+      if (@path = files.index("#{i}/#{@name}.rb")) then
+        @path = files[@path]
+        break
+      end
+    }
+    Bwkfanboy::Utils.errx(1, "no such plugin '#{@name}'") if ! @path
+    Bwkfanboy::Utils.plugin_load(@path, Bwkfanboy::Meta::PLUGIN_CLASS)
+    
+    pn = Page.new()
+    pn.check()
+    return pn
+  end
+  
+end # class
+  
+# ----------------------------------------------------------------------
+
+o = Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner]) # create OptionParser object
+o.on('-i', 'Show some info about the plugin') { |i| $conf[:mode] = 'info' }
+o.on('-l', 'List all plugins') { |i| $conf[:mode] = 'list' }
+o.on('-p', 'List all plugins paths') { |i| $conf[:mode] = 'path' }
+Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], o) # run cl parser
+
+plugin = Plugin.new(ARGV[0])
+
+case $conf[:mode]
+when 'list'
+  plugin.dirs().each {|i|
+    puts "#{i}:"
+    Dir.glob("#{i}/*.rb").each {|j|
+      puts "\t#{File.basename(j, '.rb')}"
+    }
+  }
+when 'path'
+  plugin.dirs().each {|i| puts i}
+when 'info'
+  plugin.load().dump_info
+else
+  # pipe
+  pn = plugin.load()
+  cmd = "./bwkfanboy_fetch | ./bwkfanboy_parse '#{plugin.path}' | ./bwkfanboy_generate"
+  if Bwkfanboy::Utils.cfg[:verbose] >= 2 then
+    puts pn.class::Meta::URI
+    puts cmd
+    exit 0
+  end
+
+  pipe = IO.popen(cmd, 'w+')
+  pipe.puts pn.class::Meta::URI
+  pipe.close_write
+  while line = pipe.gets
+    puts line
+  end
+  pipe.close
+end

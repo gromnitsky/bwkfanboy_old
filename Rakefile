@@ -28,6 +28,7 @@ spec = Gem::Specification.new {|i|
   i.add_dependency('activesupport', '>= 3.0.0')
   i.add_dependency('nokogiri', '>=  1.4.3')
   i.add_dependency('open4', '>=  1.0.1')
+  i.add_dependency('jsonschema', '>= 2.0.0')
 }
 
 Rake::GemPackageTask.new(spec).define
@@ -41,6 +42,6 @@ Rake::RDocTask.new('doc') {|i|
 }
 
 Rake::TestTask.new {|i|
-  i.test_files = FileList['test/ts_*.rb']
+  i.test_files = FileList['test/test_*.rb']
   i.verbose = true
 }

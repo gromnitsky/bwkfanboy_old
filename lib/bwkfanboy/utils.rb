@@ -12,7 +12,7 @@ module Bwkfanboy
     VERSION = '0.0.1'
     USER_AGENT = "#{NAME}/#{VERSION} (#{RUBY_PLATFORM}; N; #{Encoding.default_external.name}; #{RUBY_ENGINE}; rv:#{RUBY_VERSION}.#{RUBY_PATCHLEVEL})"
     PLUGIN_CLASS = 'Page'
-    DIR_TMP = "/root/tmp/#{Meta::NAME}/#{ENV['USER']}"
+    DIR_TMP = "/tmp/#{Meta::NAME}/#{ENV['USER']}"
     DIR_LOG = "#{DIR_TMP}/log"
     LOG_MAXSIZE = 64*1024
   end

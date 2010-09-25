@@ -4,18 +4,33 @@
 require 'rss/maker'
 require 'date'
 require 'json'
+require 'jsonschema'
 
 require_relative '../lib/bwkfanboy/utils'
 
-$conf = { banner: "Usage: #{File.basename($0)} [options] < json" }
+$conf = {
+  banner: "Usage: #{File.basename($0)} [options] < json",
+  check: false
+}
 
-Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], nil, true)
+o = Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner])
+o.on('--check', 'Validate the input (slow!)') { |i| $conf[:check] = true }
+Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], o) # run cl parser
 
-# TODO white JSON schema and validate stdin
 begin
   j = JSON.parse(STDIN.read)
 rescue
   Bwkfanboy::Utils.errx(1, "stdin had invalid JSON");
+end
+
+# validate the input
+if $conf[:check] then
+  begin
+    schema = File.dirname(File.expand_path($0)) + '/../lib/bwkfanboy/schema.js'
+    JSON::Schema.validate(j, JSON.parse(File.read(schema)))
+  rescue
+    Bwkfanboy::Utils.errx(1, "JSON validation failed");
+  end
 end
 
 feed = RSS::Maker.make("atom") { |maker|

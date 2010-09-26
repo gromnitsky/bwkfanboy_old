@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby19
 # -*-ruby-*-
 
+# Read stdin for a URI or a full path to the local file, download it (or
+# read for the local file) and print to stdout.
+
 require 'open-uri'
 
 require_relative '../lib/bwkfanboy/utils'

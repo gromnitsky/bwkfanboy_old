@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby19
 # -*-ruby-*-
 
+require 'minitest/unit'
 require 'minitest/autorun'
 require 'digest/md5'
 

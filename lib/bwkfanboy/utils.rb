@@ -123,6 +123,12 @@ module Bwkfanboy
       ignored, status = Process::waitpid2(pid)
       [status.exitstatus, stderr.read, stdout.read]
     end
+
+    def self.gem_dir_system
+      t = ["#{File.dirname(File.expand_path($0))}/../lib/#{Meta::NAME}", "#{Gem.dir}/gems/#{Meta::NAME}-#{Meta::VERSION}"]
+      t.each {|i| return i if File.readable?(i) }
+      raise "both paths are invalid: #{t}"
+    end
     
   end # utils
 end

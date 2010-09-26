@@ -28,11 +28,8 @@ class Plugin
       # empty
     end
     
-    # go to the directory with current script
-    Dir.chdir(File.dirname(File.expand_path($0)))
-
     r = []
-    dirs = ['../lib/plugins', '~/.bwkfanboy/plugins']
+    dirs = ["#{Bwkfanboy::Utils.gem_dir_system}/plugins", '~/.bwkfanboy/plugins']
     begin
       # this will fail for user's home directory under Apache CGI
       # environment
@@ -105,6 +102,9 @@ else
     exit 0
   end
 
+  # go to the directory with current script
+  Dir.chdir(File.dirname(File.expand_path($0)))
+  
   pipe = IO.popen(cmd, 'w+')
   pipe.puts pn.class::Meta::URI
   pipe.close_write

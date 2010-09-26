@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby19
 # -*-ruby-*-
 
+require 'minitest/unit'
 require 'minitest/autorun'
 require 'open-uri'
 require 'digest/md5'
 
-#require_relative '../lib/bwkfanboy/utils'
 require_relative 'ts_utils'
 
 $count = 0
@@ -19,7 +19,7 @@ class TestServer < MiniTest::Unit::TestCase
     @port = PORT + $count
     @pid = spawn("#{cmd CMD} -p #{@port}")
     $count += 1
-    sleep(1) # wait for the server's loading
+    sleep(2) # wait for the server's loading
   end
 
   def teardown

@@ -1,6 +1,34 @@
 #!/usr/bin/env ruby19
 # -*-ruby-*-
 
+# Start a HTTP server (by default on 127.0.0.1:9042). To get Atom feeds
+# from it, initiate GET request with URI
+#   
+#   http://localhost:9042/?p=PLUGIN
+#
+# where +PLUGIN+ is a name of a bwkfanboy's plugin (without '.re' suffix).
+#
+# To list all available plugins, point you browser to
+#
+#   http://localhost:9042/list
+#
+# The server is intended to run from a non-root user from
+# <tt>~/.login</tt> file. It can detach from a terminal if you give it
+# '-d' command line option.
+#
+# For other help, type:
+#
+#  bwkfanboy_server -h
+#
+# The server maintains 2 logs:
+#
+#   /tmp/bwkfanboy/USER/log/bwkfanboy_server.log
+#   /tmp/bwkfanboy/USER/log/bwkfanboy_server-access.log
+#
+# The file with a pid:
+#
+#   /tmp/bwkfanboy/USER/bwkfanboy_server.pid
+
 require 'webrick'
 require_relative '../lib/bwkfanboy/utils'
 
@@ -25,7 +53,7 @@ Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], o) # run cl parser
 
 Bwkfanboy::Utils.dir_tmp_create()
 
-class FeedServlet < WEBrick::HTTPServlet::AbstractServlet
+class FeedServlet < WEBrick::HTTPServlet::AbstractServlet # :nodoc: all
   def do_GET(req, res)
     if req.query['p'] && req.query['p'] =~ /^[a-zA-Z0-9_]+$/
       res['Content-Type'] = 'application/atom+xml; charset=UTF-8'
@@ -44,7 +72,7 @@ class FeedServlet < WEBrick::HTTPServlet::AbstractServlet
   end
 end
 
-class FeedListServlet < WEBrick::HTTPServlet::AbstractServlet
+class FeedListServlet < WEBrick::HTTPServlet::AbstractServlet # :nodoc: all
   def do_GET(req, res)
       cmd = "#{$conf[:converter]} -l"
       r = Bwkfanboy::Utils.cmd_run(cmd)

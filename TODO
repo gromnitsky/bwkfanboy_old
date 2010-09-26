@@ -13,8 +13,8 @@
 + WEBrick servlet and CGI script.
 + pid file for WEBrick servlet
 + Log.
-- Write doc for Parser class.
-- Documentation for bin/ scripts.
++ Write doc for Parser class.
++ Documentation for bin/ scripts.
 + "HOWTO write a plugin".
 - Plugin for /usr/local/ports/UPDATE.
 + Tests.

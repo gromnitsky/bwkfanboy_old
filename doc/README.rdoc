@@ -50,7 +50,7 @@ The program consists of 4 parts:
 1. *bwkfanboy_fetch*
 
    It reads 1 line from stdin for the URL to fetch from. The result will
-   be dumped to stdout in UTF-8.
+   be dumped to stdout.
 
 2. *bwkfanboy_parse*
 
@@ -61,8 +61,7 @@ The program consists of 4 parts:
 
 3. *bwkfanboy_generate*
 
-   Doesn't take any command line parameters, just reads stdin expecting
-   it to be a proper JSON-formatted object.
+   Reads stdin expecting it to be a proper JSON-formatted object.
 
    The result will be an Atom feed dumped to stdout in UTF-8.
 
@@ -73,5 +72,17 @@ So, without the wrapper all this together looks like:
 
 == Log
 
-All utils write to <tt>/tmp/bwkfanboy.log</tt> file if permissions
-allows it.
+All utils write to <tt>/tmp/bwkfanboy/USER/log/general.log</tt> file if
+the permissions allows it.
+
+== HTTP
+
+There are 2 method to get an Atom feed by HTTP.
+
+1. You can copy <tt>web/bwkfanboy.cgi</tt> (from the program tarball) to
+   your Apache cgi directory and run it, but this disallows you from
+   using your HOME directory for your own plugins.
+
+2. Use small *bwkfanboy_server* HTTP server. If can run from any user
+   and thus is able to inherit env variables for discovering your HOME
+   directory. Read bin/bwkfanboy_server to know how to operate it.

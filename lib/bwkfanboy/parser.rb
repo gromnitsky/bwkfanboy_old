@@ -16,6 +16,7 @@ module Bwkfanboy
       @entries = []
     end
 
+    # Invokes #myparse & checks if it has grabbed something.
     def parse()
       @entries = []
       begin
@@ -27,6 +28,8 @@ module Bwkfanboy
       Utils.errx(1, "plugin return no output") if @entries.length == 0
     end
 
+    # Prints entries in 'key: value' formatted strings. Intended for
+    # debugging.
     def dump()
       @entries.each {|i|
         puts "title    : " + i[:title]
@@ -61,6 +64,8 @@ module Bwkfanboy
       Utils::cfg[:verbose] >= 1 ? JSON.pretty_generate(j) : JSON.generate(j)
     end
 
+    # After loading a plugin, one can do basic validation of the
+    # plugin's class with the help of this method.
     def check
       m = get_meta()
       begin
@@ -72,6 +77,7 @@ module Bwkfanboy
       end
     end
 
+    # Prints plugin's meta information.
     def dump_info()
       m = get_meta()
       puts "Version     : #{m::VERSION}"
@@ -86,7 +92,9 @@ module Bwkfanboy
     def myparse()
       raise "plugin isn't finished yet"
     end
-    
+
+    # Tries to parse _s_ as a date string. Return the result in ISO 8601
+    # format.
     def date(s)
       begin
         DateTime.parse(clean(s)).iso8601()

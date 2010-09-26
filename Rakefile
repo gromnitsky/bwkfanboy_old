@@ -17,7 +17,7 @@ spec = Gem::Specification.new {|i|
   i.files = FileList['lib/**/*.rb', 'bin/*', '[A-Z]*', 'test/**/*'].to_a
 
   exe = ['bwkfanboy']
-  [ 'fetch', 'parse', 'generate'].each {|j| exe << "#{exe[0]}_#{j}" }
+  [ 'fetch', 'parse', 'generate', 'server'].each {|j| exe << "#{exe[0]}_#{j}" }
   i.executables = exe
   i.default_executable = exe[0]
   
@@ -38,7 +38,8 @@ task :default => %(repackage)
 Rake::RDocTask.new('doc') {|i|
   i.main = "Bwkfanboy"
   i.rdoc_files.include('doc/*.rdoc', "lib/**/*.rb", "bin/*")
-  i.rdoc_files.exclude("lib/plugins")
+  i.rdoc_files.exclude("lib/**/plugins")
+  i.rdoc_files.exclude("test")
 }
 
 Rake::TestTask.new {|i|

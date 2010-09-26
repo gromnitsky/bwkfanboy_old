@@ -18,8 +18,8 @@ $conf = {
 
 o = Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner]) # create OptionParser object
 o.on('-b VAL', 'BindAddress') { |i| $conf[:addr] = i }
-o.on('-p VAL', 'A port number') { |i| $conf[:mode] = i }
-o.on('-c VAL', "A path to main #{Bwkfanboy::Meta::NAME} executable") { |i| $conf[:mode] = i }
+o.on('-p VAL', 'A port number') { |i| $conf[:port] = i }
+o.on('-c VAL', "A path to main #{Bwkfanboy::Meta::NAME} executable") { |i| $conf[:converter] = i }
 o.on('-d', 'Detach from a terminal') {|i| $conf[:server_type] = WEBrick::Daemon }
 Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], o) # run cl parser
 

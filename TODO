@@ -4,6 +4,7 @@
 -----
 
 - Add plugin listing to bwkfanboy_server.
+- More tests.
 
 0.0.1
 -----
@@ -16,5 +17,5 @@
 - Documentation for bin/ scripts.
 + "HOWTO write a plugin".
 - Plugin for /usr/local/ports/UPDATE.
-- Tests.
-+ import to git
++ Tests.
++ Import to git

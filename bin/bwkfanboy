@@ -1,6 +1,18 @@
 #!/usr/bin/env ruby19
 # -*-ruby-*-
 
+# This program is executed by bin/bwkfanboy_server to do all dirty work:
+# fetch HTML, parse it and generate a pretty Atom feed.
+#
+# It is a wrapper which you can utilize for such common tasks as listing
+# all available plugins.
+#
+# Type:
+#
+#   % bwkfanboy -h
+#
+# to get some basic help & read about Bwkfanboy module.
+
 require_relative '../lib/bwkfanboy/parser'
 
 $conf = {
@@ -10,7 +22,7 @@ $conf = {
   banner: "Usage: #{File.basename($0)} [options] plugin-name"
 }
 
-class Plugin
+class Plugin # :nodoc: all
   attr_reader :name, :path
   
   def initialize(name)
@@ -29,7 +41,7 @@ class Plugin
     end
     
     r = []
-    dirs = ["#{Bwkfanboy::Utils.gem_dir_system}/plugins", '~/.bwkfanboy/plugins']
+    dirs = ['~/.bwkfanboy/plugins', "#{Bwkfanboy::Utils.gem_dir_system}/plugins"]
     begin
       # this will fail for user's home directory under Apache CGI
       # environment
@@ -76,6 +88,7 @@ o = Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner]) # create OptionParser object
 o.on('-i', 'Show some info about the plugin') { |i| $conf[:mode] = 'info' }
 o.on('-l', 'List all plugins') { |i| $conf[:mode] = 'list' }
 o.on('-p', 'List all plugins paths') { |i| $conf[:mode] = 'path' }
+o.on('-D', '(ignore this) Use URI_DEBUG const instead URI in plugins') { |i| $conf[:mode] = 'debug' }
 Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], o) # run cl parser
 
 plugin = Plugin.new(ARGV[0])
@@ -93,11 +106,11 @@ when 'path'
 when 'info'
   plugin.load().dump_info
 else
-  # pipe
+  # A pipe mode
   pn = plugin.load()
   cmd = "./bwkfanboy_fetch | ./bwkfanboy_parse '#{plugin.path}' | ./bwkfanboy_generate"
   if Bwkfanboy::Utils.cfg[:verbose] >= 2 then
-    puts pn.class::Meta::URI
+    puts ($conf[:mode] != 'debug' ? pn.class::Meta::URI : pn.class::Meta::URI_DEBUG)
     puts cmd
     exit 0
   end
@@ -106,7 +119,7 @@ else
   Dir.chdir(File.dirname(File.expand_path($0)))
   
   pipe = IO.popen(cmd, 'w+')
-  pipe.puts pn.class::Meta::URI
+  pipe.puts ($conf[:mode] != 'debug' ? pn.class::Meta::URI : pn.class::Meta::URI_DEBUG)
   pipe.close_write
   while line = pipe.gets
     puts line

@@ -1,5 +1,3 @@
-# $Id$
-#
 # A simple plugin that parses the listing of bwk's articles from
 # dailyprincetonian.com.
 
@@ -7,8 +5,8 @@ require 'nokogiri'
 
 class Page < Bwkfanboy::Parse
   module Meta
-#    URI = 'http://www.dailyprincetonian.com/advanced_search/?author=Brian+Kernighan'
-    URI = '/home/alex/lib/software/example/ruby/bwkfanboy/test/semis/bwk.html'
+    URI = 'http://www.dailyprincetonian.com/advanced_search/?author=Brian+Kernighan'
+    URI_DEBUG = '/home/alex/lib/software/example/ruby/bwkfanboy/test/semis/bwk.html'
     ENC = 'UTF-8'
     VERSION = 1
     COPYRIGHT = '(c) 2010 Alexander Gromnitsky'

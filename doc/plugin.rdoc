@@ -1,5 +1,3 @@
-$Id$ -*-text-*-
-
 = HOWTO Write a \Plugin
 
 First of all, look at examples provided with bwkfanboy. They were

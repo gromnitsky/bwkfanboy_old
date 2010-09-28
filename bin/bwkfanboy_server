@@ -41,7 +41,8 @@ $conf = {
   workdir: File.dirname(File.expand_path($0)),
   pidfile: "#{Bwkfanboy::Meta::DIR_TMP}/#{File.basename($0)}.pid",
   log: "#{Bwkfanboy::Meta::DIR_LOG}/#{File.basename($0)}.log",
-  alog: "#{Bwkfanboy::Meta::DIR_LOG}/#{File.basename($0)}-access.log"
+  alog: "#{Bwkfanboy::Meta::DIR_LOG}/#{File.basename($0)}-access.log",
+  mode: 'pipe'
 }
 
 o = Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner]) # create OptionParser object
@@ -49,6 +50,7 @@ o.on('-b VAL', 'BindAddress') { |i| $conf[:addr] = i }
 o.on('-p VAL', 'A port number') { |i| $conf[:port] = i }
 o.on('-c VAL', "A path to main #{Bwkfanboy::Meta::NAME} executable") { |i| $conf[:converter] = i }
 o.on('-d', 'Detach from a terminal') {|i| $conf[:server_type] = WEBrick::Daemon }
+o.on('-D', '(ignore this) Use URI_DEBUG const instead URI in plugins') { |i| $conf[:mode] = 'debug' }
 Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], o) # run cl parser
 
 Bwkfanboy::Utils.dir_tmp_create()
@@ -59,7 +61,7 @@ class FeedServlet < WEBrick::HTTPServlet::AbstractServlet # :nodoc: all
       res['Content-Type'] = 'application/atom+xml; charset=UTF-8'
       res['Content-Disposition'] = "inline; filename=\"#{Bwkfanboy::Meta::NAME}-#{req.query['p']}.xml"
 
-      cmd = "#{$conf[:converter]} #{req.query['p']}"
+      cmd = "#{$conf[:converter]} #{$conf[:mode] == 'debug' ? '-D' : ''} #{req.query['p']}"
       r = Bwkfanboy::Utils.cmd_run(cmd)
       if r[0] != 0 then
         raise WEBrick::HTTPStatus::InternalServerError.new("Errors in the pipeline:\n\n #{r[1]}")

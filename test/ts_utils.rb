@@ -10,6 +10,12 @@ def cmd(c)
     # we are probably in the test directory
     '../bin/' + c
   else
-    raise 'run tests from the program\'s root directory or in the test directory'
+    # tests were invoked by 'gem check -t bwkfanboy'
+    begin
+      Dir.chdir(Bwkfanboy::Utils.gem_dir_system + '/../../test')
+      '../bin/' + c
+    rescue
+      raise "running tests from '#{Dir.pwd}' isn't supported: #{$!}"
+    end
   end
 end

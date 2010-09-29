@@ -6,7 +6,7 @@ require 'nokogiri'
 class Page < Bwkfanboy::Parse
   module Meta
     URI = 'http://www.dailyprincetonian.com/advanced_search/?author=Brian+Kernighan'
-    URI_DEBUG = '/home/alex/lib/software/example/ruby/bwkfanboy/test/semis/bwk.html'
+    URI_DEBUG = '/home/alex/lib/software/alex/bwkfanboy/test/semis/bwk.html'
     ENC = 'UTF-8'
     VERSION = 1
     COPYRIGHT = '(c) 2010 Alexander Gromnitsky'

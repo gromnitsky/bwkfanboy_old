@@ -57,7 +57,7 @@ Bwkfanboy::Utils.dir_tmp_create()
 
 class FeedServlet < WEBrick::HTTPServlet::AbstractServlet # :nodoc: all
   def do_GET(req, res)
-    if req.query['p'] && req.query['p'] =~ /^[a-zA-Z0-9_]+$/
+    if req.query['p'] && req.query['p'] =~ Bwkfanboy::Meta::PLUGIN_NAME
       res['Content-Type'] = 'application/atom+xml; charset=UTF-8'
       res['Content-Disposition'] = "inline; filename=\"#{Bwkfanboy::Meta::NAME}-#{req.query['p']}.xml"
 

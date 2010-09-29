@@ -102,17 +102,23 @@ module Bwkfanboy
       end
     end
 
+    # will help you to check if there is a
+    def toobig?
+      return true if @entries.length >= ENTRIES_MAX
+      return false
+    end
+
     def <<(t)
-      if @entries.length >= ENTRIES_MAX then
+      if toobig? then
         Utils.warnx("reached max number of entries (#{ENTRIES_MAX})")
         return @entries
       end
           
-      %w(updated author).each { |i|
-        fail "unable to extract '#{i}'" if ! t.key?(i.to_sym) || t[i.to_sym].empty?
+      %w(updated author link).each { |i|
+        fail "unable to extract '#{i}'" if ! t.key?(i.to_sym) || t[i.to_sym] == nil || t[i.to_sym].empty?
       }
-      %w(title link content).each { |i|
-        fail "missing '#{i}'" if ! t.key?(i.to_sym)
+      %w(title content).each { |i|
+        fail "missing '#{i}'" if ! t.key?(i.to_sym) || t[i.to_sym] == nil
       }
       # a redundant check if user hasn't redefined date() method
       if t[:updated] !~ /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2}/ then

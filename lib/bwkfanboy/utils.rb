@@ -13,6 +13,7 @@ module Bwkfanboy
     DIR_TMP = "/tmp/#{Meta::NAME}/#{ENV['USER']}"
     DIR_LOG = "#{DIR_TMP}/log"
     LOG_MAXSIZE = 64*1024
+    PLUGIN_NAME = /^[a-zA-Z0-9_-]+$/
   end
   
   module Utils

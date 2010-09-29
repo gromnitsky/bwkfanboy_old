@@ -8,7 +8,7 @@ require 'rake/testtask'
 
 spec = Gem::Specification.new() {|i|
   i.name = "bwkfanboy"
-  i.summary = 'A HTML to Atom feed converter that you can use to watch sites that do not provide its own feed'
+  i.summary = 'A HTML to Atom feed converter that you can use to watch sites that do not provide its own feed.'
   i.version = '0.0.1'
   i.author = 'Alexander Gromnitsky'
   i.email = 'alexander.gromnitsky@gmail.com'

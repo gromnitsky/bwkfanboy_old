@@ -15,7 +15,7 @@ end
 
 cgi = CGI.new
 if cgi.has_key?('p') then
-  errx("invalid plugin name: #{cgi['p']}") if cgi['p'] !~ /^[a-zA-Z0-9_]+$/
+  errx("invalid plugin name: #{cgi['p']}") if cgi['p'] !~ Bwkfanboy::Meta::PLUGIN_NAME
 else
   errx("parametr 'p' required")
 end

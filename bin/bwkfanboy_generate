@@ -44,14 +44,24 @@ feed = RSS::Maker.make("atom") { |maker|
   maker.channel.updated = j['channel']['updated']
   maker.channel.author = j['channel']['author']
   maker.channel.title = j['channel']['title']
-  maker.channel.link = j['channel']['link']
+  
+  maker.channel.links.new_link {|i|
+    i.href = j['channel']['link']
+    i.rel = 'alternate'
+    i.type = 'text/html' # eh
+  }
 
   maker.items.do_sort = true
 
   j['x_entries'].each { |i|
     maker.items.new_item do |item|
-      item.link = i['link']
+      item.links.new_link {|k|
+        k.href = i['link']
+        k.rel = 'alternate'
+        k.type = 'text/html' # only to make happy crappy pr2nntp gateway
+      }
       item.title = i['title']
+      item.author = i['author']
       item.updated = i['updated']
       item.content.type = j['channel']['x_entries_content_type']
       

@@ -19,7 +19,7 @@ parent, overriding 1 method.
 
 The plugins can be in the system
 
-  `gem env gemdir`/gems/bwkfanboy-x.y.z/lib/plugins
+  `gem env gemdir`/gems/bwkfanboy-x.y.z/lib/bwkfanboy/plugins
 
 or user's home
 
@@ -38,7 +38,7 @@ The program consists of 4 parts:
      % bwkfanboy bwk
 
    and it will load
-   <tt>/usr/local/lib/ruby/gems/1.9/bwkfanboy-0.0.1/lib/plugins/bwk.rb</tt>
+   <tt>/usr/local/lib/ruby/gems/1.9/gems/bwkfanboy-0.0.1/lib/bwkfanboy/plugins/bwk.rb</tt>
    file on my FreeBSD machine, fetch and parse html from
    dailyprincetonian.com and generate the required feed, dumping it to
    stdout.

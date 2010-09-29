@@ -12,6 +12,7 @@ spec = Gem::Specification.new() {|i|
   i.version = '0.0.1'
   i.author = 'Alexander Gromnitsky'
   i.email = 'alexander.gromnitsky@gmail.com'
+  i.homepage = 'http://github.com/gromnitsky/bwkfanboy'
   i.platform = Gem::Platform::RUBY
   i.required_ruby_version = '>= 1.9'
   i.files = FileList['lib/**/*', 'bin/*', 'doc/*', '[A-Z]*', 'test/**/*']

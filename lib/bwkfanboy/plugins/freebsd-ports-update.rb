@@ -1,3 +1,5 @@
+require 'digest/md5'
+
 class Page < Bwkfanboy::Parse
   module Meta
     URI = '/usr/ports/UPDATING'
@@ -39,7 +41,7 @@ class Page < Bwkfanboy::Parse
         break if ! myadd(ready, t, l, u, a, c)
         ready = true
         u = date($1)
-        l = "file://#{Meta::URI}\##{$1}"
+        l = $1                  # partial, see below
         t = a = c = nil
         next
       end
@@ -49,6 +51,8 @@ class Page < Bwkfanboy::Parse
           mode = 'title'
           t = $1
           c = clean($&) + "\n"
+          # link should be unique
+          l = "file://#{Meta::URI}\##{l}-#{Digest::MD5.hexdigest($1)}"
         elsif line =~ re_a
           mode = 'author'
           a = $1

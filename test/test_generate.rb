@@ -25,6 +25,6 @@ class TestGenerate < MiniTest::Unit::TestCase
     r = Bwkfanboy::Utils.cmd_run("#{cmd CMD} --check < #{@tpath}semis/bwk.json")
     assert_equal(0, r[0])
     # bin/bwkfanboy_generate < test/semis/bwk.json|md5
-    assert_equal('d432f4c8cf1c97bea200a2b8fd338bf8', Digest::MD5.hexdigest(r[2]))
+    assert_equal('adc5a0d9487bdc11b6896fe29745ffa3', Digest::MD5.hexdigest(r[2]))
   end
 end

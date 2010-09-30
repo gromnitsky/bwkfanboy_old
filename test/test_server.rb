@@ -6,8 +6,9 @@ require 'digest/md5'
 
 require_relative 'ts_utils'
 
-$count = 0
+$count = 1
 
+# this tests will mess up logs and the pid file
 class TestServer < MiniTest::Unit::TestCase
   CMD = 'bwkfanboy_server'
   PORT = 9042

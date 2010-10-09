@@ -7,7 +7,7 @@ require 'active_support/core_ext/module/attribute_accessors'
 module Bwkfanboy
   module Meta
     NAME = 'bwkfanboy'
-    VERSION = '0.0.1'
+    VERSION = '0.1.1'
     USER_AGENT = "#{NAME}/#{VERSION} (#{RUBY_PLATFORM}; N; #{Encoding.default_external.name}; #{RUBY_ENGINE}; rv:#{RUBY_VERSION}.#{RUBY_PATCHLEVEL})"
     PLUGIN_CLASS = 'Page'
     DIR_TMP = "/tmp/#{Meta::NAME}/#{ENV['USER']}"

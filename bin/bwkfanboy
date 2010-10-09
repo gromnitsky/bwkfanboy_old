@@ -17,8 +17,6 @@ require 'shellwords'
 require_relative '../lib/bwkfanboy/parser'
 
 $conf = {
-  prog_name: 'bwkfanboy',
-  prog_ver: '0.0.1',
   mode: 'pipe',
   banner: "Usage: #{File.basename($0)} [options] plugin-name"
 }
@@ -90,6 +88,7 @@ o.on('-i', 'Show some info about the plugin') { |i| $conf[:mode] = 'info' }
 o.on('-l', 'List all plugins') { |i| $conf[:mode] = 'list' }
 o.on('-p', 'List all plugins paths') { |i| $conf[:mode] = 'path' }
 o.on('-D', '(ignore this) Use URI_DEBUG const instead URI in plugins') { |i| $conf[:mode] = 'debug' }
+o.on('-V', 'Show version & exit.') { |i| $conf[:mode] = 'version' }
 Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], o) # run cl parser
 
 plugin = Plugin.new(ARGV[0])
@@ -107,6 +106,8 @@ when 'path'
   plugin.dirs().each {|i| puts i}
 when 'info'
   plugin.load(opt).dump_info
+when 'version'
+  puts Bwkfanboy::Meta::VERSION
 else
   # A pipe mode
   pn = plugin.load(opt)

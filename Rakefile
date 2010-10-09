@@ -9,7 +9,7 @@ require 'rake/testtask'
 spec = Gem::Specification.new() {|i|
   i.name = "bwkfanboy"
   i.summary = 'A converter from HTML to Atom feed that you can use to watch sites that do not provide its own feed.'
-  i.version = '0.0.1'
+  i.version = '0.1.1'
   i.author = 'Alexander Gromnitsky'
   i.email = 'alexander.gromnitsky@gmail.com'
   i.homepage = 'http://github.com/gromnitsky/bwkfanboy'
@@ -20,11 +20,10 @@ spec = Gem::Specification.new() {|i|
   i.executables = FileList['bin/*'].gsub(/^bin\//, '')
   i.default_executable = i.name
   
-  i.has_rdoc = true
   i.test_files = FileList['test/test_*.rb']
   
   i.rdoc_options << '-m' << 'Bwkfanboy' << '-x' << 'plugins'
-  i.extra_rdoc_files = FileList['bin/*']
+  i.extra_rdoc_files = FileList['bin/*', 'doc/*']
   
   i.add_dependency('activesupport', '>= 3.0.0')
   i.add_dependency('nokogiri', '>=  1.4.3')

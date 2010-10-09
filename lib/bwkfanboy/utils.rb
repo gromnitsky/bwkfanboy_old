@@ -13,7 +13,8 @@ module Bwkfanboy
     DIR_TMP = "/tmp/#{Meta::NAME}/#{ENV['USER']}"
     DIR_LOG = "#{DIR_TMP}/log"
     LOG_MAXSIZE = 64*1024
-    PLUGIN_NAME = /^[a-zA-Z0-9_-]+$/
+    PLUGIN_NAME = /^[ a-zA-Z0-9_-]+$/
+    PLUGIN_OPTS = /^[ a-zA-Z'"0-9_-]+$/
   end
   
   module Utils
@@ -94,6 +95,12 @@ module Bwkfanboy
       end
     end
 
+     # Get possible options for the parser.
+    def self.plugin_opts(a)
+      opt = a.size >= 2 ? a[1..-1] : ''
+    end
+
+    
     # Parses command line options. _arr_ is an array of options (usually
     # +ARGV+). _banner_ is a help string that describes what your
     # program does.

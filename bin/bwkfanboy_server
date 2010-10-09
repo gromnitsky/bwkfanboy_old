@@ -7,6 +7,12 @@
 #   http://localhost:9042/?p=PLUGIN
 #
 # where +PLUGIN+ is a name of a bwkfanboy's plugin (without '.re' suffix).
+# If the plugin requires additional options you can specify them like:
+#
+#   http://localhost:9042/?p=PLUGIN&o=opt1%20%22opt2%20has%20spaces%22
+#
+# where <tt>opt1%20%22opt2%20has%20spaces%22</tt> is a encoded string
+# <tt>opt1 "opt2 has spaces"</tt>.
 #
 # To list all available plugins, point you browser to
 #
@@ -29,6 +35,7 @@
 #
 #   /tmp/bwkfanboy/USER/bwkfanboy_server.pid
 
+require 'shellwords'
 require 'webrick'
 require_relative '../lib/bwkfanboy/utils'
 
@@ -61,7 +68,12 @@ class FeedServlet < WEBrick::HTTPServlet::AbstractServlet # :nodoc: all
       res['Content-Type'] = 'application/atom+xml; charset=UTF-8'
       res['Content-Disposition'] = "inline; filename=\"#{Bwkfanboy::Meta::NAME}-#{req.query['p']}.xml"
 
-      cmd = "#{$conf[:converter]} #{$conf[:mode] == 'debug' ? '-D' : ''} #{req.query['p']}"
+      # possible options for the plugin
+      if req.query['o'] && req.query['o'] !~ Bwkfanboy::Meta::PLUGIN_OPTS
+        raise WEBrick::HTTPStatus::InternalServerError.new("'o' is too harsh")
+      end
+      
+      cmd = "#{$conf[:converter]} #{$conf[:mode] == 'debug' ? '-D' : ''} '#{req.query['p']}' #{req.query['o']}"
       r = Bwkfanboy::Utils.cmd_run(cmd)
       if r[0] != 0 then
         raise WEBrick::HTTPStatus::InternalServerError.new("Errors in the pipeline:\n\n #{r[1]}")

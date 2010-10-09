@@ -5,7 +5,7 @@ require 'cgi'
 require_relative '../lib/bwkfanboy/parser'
 
 # set this!
-CONVERTER = '/home/alex/lib/software/example/ruby/bwkfanboy/bin/bwkfanboy'
+CONVERTER = '/home/alex/lib/software/alex/bwkfanboy/bin/bwkfanboy'
 
 def errx(t)
   print "Content-Type: text/plain\r\n\r\n"
@@ -20,7 +20,11 @@ else
   errx("parametr 'p' required")
 end
 
-cmd = "#{CONVERTER} #{cgi['p']}"
+if cgi.has_key?('o')
+  errx("'o' is too harsh") if cgi['o'] !~ Bwkfanboy::Meta::PLUGIN_OPTS
+end
+
+cmd = "#{CONVERTER} '#{cgi['p']}' #{cgi['o']}"
 r = Bwkfanboy::Utils.cmd_run(cmd)
 errx("\n\n#{r[1]}") if r[0] != 0
 xml = r[2]

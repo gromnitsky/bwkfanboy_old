@@ -28,6 +28,8 @@ class TestServer < MiniTest::Unit::TestCase
   def test_no_plugin
     assert_raises(OpenURI::HTTPError) { open("http://#{ADDR}:#{@port}") }
     assert_raises(OpenURI::HTTPError) { open("http://#{ADDR}:#{@port}/?p=INVALID") }
+    # 'o' is missing
+    assert_raises(OpenURI::HTTPError) { open("http://#{ADDR}:#{@port}/?p=quora") }
   end
 
   def test_right_plugin
@@ -35,5 +37,10 @@ class TestServer < MiniTest::Unit::TestCase
     open("http://#{ADDR}:#{@port}/?p=bwk") { |f| r = f.read }
     # wget -q -O - 127.0.0.1:9042/\?p=bwk | md5
     assert_equal('d547f81d2e05ff11713cd3b5472b161a', Digest::MD5.hexdigest(r))
+
+    r = ''
+    open("http://#{ADDR}:#{@port}/?p=quora&o=foo") { |f| r = f.read }
+    # wget -q -O - 127.0.0.1:9042/\?p=quora&o=foo | md5
+    assert_equal('08deadc7c1c2ef30f5858148ddaae9b4', Digest::MD5.hexdigest(r))
   end
 end

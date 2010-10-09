@@ -13,6 +13,7 @@
 #
 # to get some basic help & read about Bwkfanboy module.
 
+require 'shellwords'
 require_relative '../lib/bwkfanboy/parser'
 
 $conf = {
@@ -62,7 +63,7 @@ class Plugin # :nodoc: all
     return r
   end
 
-  def load()
+  def load(opt)
     abort($conf[:banner]) unless (@name && @name !~ /^\s*$/)
 
     dirs.each {|i|
@@ -75,7 +76,7 @@ class Plugin # :nodoc: all
     Bwkfanboy::Utils.errx(1, "no such plugin '#{@name}'") if ! @path
     Bwkfanboy::Utils.plugin_load(@path, Bwkfanboy::Meta::PLUGIN_CLASS)
     
-    pn = Page.new()
+    pn = Page.new(opt)
     pn.check()
     return pn
   end
@@ -92,6 +93,7 @@ o.on('-D', '(ignore this) Use URI_DEBUG const instead URI in plugins') { |i| $co
 Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], o) # run cl parser
 
 plugin = Plugin.new(ARGV[0])
+opt = Bwkfanboy::Utils.plugin_opts(ARGV)
 
 case $conf[:mode]
 when 'list'
@@ -104,13 +106,13 @@ when 'list'
 when 'path'
   plugin.dirs().each {|i| puts i}
 when 'info'
-  plugin.load().dump_info
+  plugin.load(opt).dump_info
 else
   # A pipe mode
-  pn = plugin.load()
-  cmd = "./bwkfanboy_fetch | ./bwkfanboy_parse '#{plugin.path}' | ./bwkfanboy_generate"
+  pn = plugin.load(opt)
+  cmd = "./bwkfanboy_fetch | ./bwkfanboy_parse '#{plugin.path}' #{opt.size != 0 ? Shellwords.join(opt) : ''} | ./bwkfanboy_generate"
   if Bwkfanboy::Utils.cfg[:verbose] >= 2 then
-    puts ($conf[:mode] != 'debug' ? pn.class::Meta::URI : pn.class::Meta::URI_DEBUG)
+    puts ($conf[:mode] != 'debug' ? pn.uri() : pn.class::Meta::URI_DEBUG)
     puts cmd
     exit 0
   end
@@ -119,7 +121,7 @@ else
   Dir.chdir(File.dirname(File.expand_path($0)))
   
   pipe = IO.popen(cmd, 'w+')
-  pipe.puts ($conf[:mode] != 'debug' ? pn.class::Meta::URI : pn.class::Meta::URI_DEBUG)
+  pipe.puts ($conf[:mode] != 'debug' ? pn.uri : pn.class::Meta::URI_DEBUG)
   pipe.close_write
   while line = pipe.gets
     puts line

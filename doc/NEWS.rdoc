@@ -1,0 +1,5 @@
+=== 0.1.1
+
+- Plugins can have user-supplied options in realtime.
+- Added quora.rb plugin.
+- Fixed some typos.

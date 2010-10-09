@@ -9,9 +9,12 @@ module Bwkfanboy
   # :include: ../../doc/plugin.rdoc
   class Parse
     ENTRIES_MAX = 64
+
+    attr_reader :opt
     
-    def initialize()
+    def initialize(opt = [])
       @entries = []
+      @opt = opt
     end
 
     # Invokes #myparse & checks if it has grabbed something.
@@ -24,6 +27,11 @@ module Bwkfanboy
         Utils.errx(1, "parsing failed: #{$!}\n\nBacktrace:\n\n#{$!.backtrace.join("\n")}")
       end
       Utils.errx(1, "plugin return no output") if @entries.length == 0
+    end
+
+    def uri()
+      m = get_meta()
+      eval("\"#{m::URI}\"")
     end
 
     # Prints entries in 'key: value' formatted strings. Intended for
@@ -70,8 +78,12 @@ module Bwkfanboy
         [:URI, :ENC, :VERSION, :COPYRIGHT, :TITLE, :CONTENT_TYPE].each {|i|
           fail "#{m}::#{i} not defined or empty" if (! m.const_defined?(i) || m.const_get(i) =~ /^\s*$/)
         }
+        
+        if m::URI =~ /#\{.+?\}/ && @opt.size == 0
+          fail 'additional options required'
+        end
       rescue
-        Utils.errx(1, "incomplete plugin: #{$!}")
+        Utils.errx(1, "incomplete plugin's instance: #{$!}")
       end
     end
 
@@ -81,7 +93,7 @@ module Bwkfanboy
       puts "Version     : #{m::VERSION}"
       puts "Copyright   : #{m::COPYRIGHT}"
       puts "Title       : #{m::TITLE}"
-      puts "URI         : #{m::URI}"
+      puts "URI         : #{uri}"
     end
 
     protected

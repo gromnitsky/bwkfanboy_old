@@ -100,19 +100,50 @@ HTML you want to parse. The general idea:
   parses a sting and return a date in ISO8601 format. You may
   override #date method if you like.
 
+=== Options
+
+Plugins can have _options_ which user should provide to the plugin in
+the real-time. For example, say you're scraping a site where many users
+are wasting their time. If you want to watch for several of them it is
+silly to write a new plugin every time for a new participant. Instead,
+you can write 1 plugin which have an _option_ to take a parameter (a
+user name, in this case).
+
+Options (if any) are always accessible via \#opt method which is just
+attr_reader of a hash.
+
+The really interesting trick one can to play with Meta::URI constant. It
+is possible to make it dynamic, for example:
+
+  URI = 'http://www.quora.com/#{opt[0]}/answers'
+
+Then, if user will provide 1 option (say 'Mark-Suster')--it will appear
+in the final URI as follows:
+
+  http://www.quora.com/Mark-Suster/answers
+
+Such dynamic is possible only for Meta::URI constant and if it is not
+static, _option_ becomes mandatory for the end-user.
+
 == How to test all this
 
 To test how nice your plugin works, save the html page to the file
 and type:
 
-  % bwkparser_parse -vv path/to/a/plugin.rb < saved_page.html
+  % bwkfanboy_parse -vv path/to/a/plugin.rb < saved_page.html
 
 to see the result as in plain text, or
 
-  % bwkparser_parse -v path/to/a/plugin.rb < saved_page.html
+  % bwkfanboy_parse -v path/to/a/plugin.rb < saved_page.html
 
 as pretty JSON.
 
-<tt>bwkparser_parse</tt> return 0 if no errors occurred or >= 1 if you
+For option-enabled plugins, supply additional parameters for them after
+the plugin path:
+
+  % bwkfanboy_parse -vv path/to/a/plugin.rb \
+    option_1 "options 2" < saved_page.html
+
+<tt>bwkfanboy_parse</tt> return 0 if no errors occurred or >= 1 if you
 have errors in your plugin code. N.B.: the output from
 <tt>bwkparser_parse</tt> is always in UTF-8.

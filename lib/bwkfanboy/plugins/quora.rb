@@ -17,9 +17,9 @@ class Page < Bwkfanboy::Parse
     URI = 'http://www.quora.com/#{opt[0]}/answers'
     URI_DEBUG = '/home/alex/lib/software/alex/bwkfanboy/test/semis/quora.html'
     ENC = 'UTF-8'
-    VERSION = 1
+    VERSION = 2
     COPYRIGHT = "See bwkfanboy's LICENSE file"
-    TITLE = "Last n answers (per-user) from Quora."
+    TITLE = "Last n answers (per-user) from Quora; requires nodejs"
     CONTENT_TYPE = 'html'
   end
   
@@ -34,6 +34,9 @@ class Page < Bwkfanboy::Parse
     doc.xpath("//script").each {|i|
       js = i.text
       if js.include?('"epoch_us"')
+        if Bwkfanboy::Utils.cfg[:verbose] >= 3
+          File.open("#{File.basename(__FILE__)}-epoch.js.raw", "w+") {|i| i.puts js }
+        end
         r = Bwkfanboy::Utils.cmd_run("echo '#{js}' | #{File.dirname(__FILE__)}/quora.js")
         fail 'evaluation in nodejs failed' if r[0] != 0
         tstp = JSON.parse(r[2])
@@ -51,6 +54,7 @@ class Page < Bwkfanboy::Parse
       l = clean(i.xpath("h2//a")[0].attributes['href'].value())
       next unless tstp.key?(l)  # ignore answers without timestamps
       u = date(Time.at(tstp[l]/1000/1000).to_s)
+#      u = DateTime.new.iso8601
       l = url + l + '/answer/' + profile
       
       c = i.xpath("../div[@class='hidden expanded_q_text']/div").inner_html(encoding: Meta::ENC)

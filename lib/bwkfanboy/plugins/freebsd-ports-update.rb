@@ -6,7 +6,7 @@ class Page < Bwkfanboy::Parse
     URI_DEBUG = URI
     ENC = 'ASCII'
     VERSION = 1
-    COPYRIGHT = '(c) 2010 Alexander Gromnitsky'
+    COPYRIGHT = "See bwkfanboy's LICENSE file"
     TITLE = "News from FreeBSD ports"
     CONTENT_TYPE = 'text'
   end

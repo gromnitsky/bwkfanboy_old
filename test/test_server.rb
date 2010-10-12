@@ -40,7 +40,7 @@ class TestServer < MiniTest::Unit::TestCase
 
     r = ''
     open("http://#{ADDR}:#{@port}/?p=quora&o=foo") { |f| r = f.read }
-    # wget -q -O - 127.0.0.1:9042/\?p=quora&o=foo | md5
-    assert_equal('08deadc7c1c2ef30f5858148ddaae9b4', Digest::MD5.hexdigest(r))
+    # wget -q -O - '127.0.0.1:9042/\?p=quora&o=foo' | md5
+    assert_equal('c431564d566ea25b5c7bf6417665c769', Digest::MD5.hexdigest(r))
   end
 end

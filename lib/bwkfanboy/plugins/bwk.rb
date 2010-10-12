@@ -9,7 +9,7 @@ class Page < Bwkfanboy::Parse
     URI_DEBUG = '/home/alex/lib/software/alex/bwkfanboy/test/semis/bwk.html'
     ENC = 'UTF-8'
     VERSION = 1
-    COPYRIGHT = '(c) 2010 Alexander Gromnitsky'
+    COPYRIGHT = "See bwkfanboy's LICENSE file"
     TITLE = "Brian Kernighan's articles from Daily Princetonian"
     CONTENT_TYPE = 'html'
   end

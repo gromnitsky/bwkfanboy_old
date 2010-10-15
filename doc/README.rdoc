@@ -15,8 +15,8 @@ struggling).
 
 == Plugins
 
-bwkfanboy comes with 1 exmple plugin that parses a search page of
-dailyprincetonian.com looking for bwk's articles.
+bwkfanboy comes with several plugins. One of them, for example, parses a
+search page of dailyprincetonian.com looking for bwk's articles.
 
 The plugin is a Ruby class +Page+ that inherits Bwkfanboy::Parse
 parent, overriding 1 method.

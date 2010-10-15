@@ -17,7 +17,7 @@ class Page < Bwkfanboy::Parse
     URI = 'http://www.quora.com/#{opt[0]}/answers'
     URI_DEBUG = '/home/alex/lib/software/alex/bwkfanboy/test/semis/quora.html'
     ENC = 'UTF-8'
-    VERSION = 2
+    VERSION = 3
     COPYRIGHT = "See bwkfanboy's LICENSE file"
     TITLE = "Last n answers (per-user) from Quora; requires nodejs"
     CONTENT_TYPE = 'html'
@@ -38,7 +38,7 @@ class Page < Bwkfanboy::Parse
           File.open("#{File.basename(__FILE__)}-epoch.js.raw", "w+") {|i| i.puts js }
         end
         r = Bwkfanboy::Utils.cmd_run("echo '#{js}' | #{File.dirname(__FILE__)}/quora.js")
-        fail 'evaluation in nodejs failed' if r[0] != 0
+        fail "evaluation in nodejs failed: #{r[1]}" if r[0] != 0
         tstp = JSON.parse(r[2])
         break
       end

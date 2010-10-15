@@ -125,9 +125,12 @@ module Bwkfanboy
 
     # used in CGI and WEBrick examples
     def self.cmd_run(cmd)
-      pid, stdin, stdout, stderr = Open4::popen4(cmd)
-      ignored, status = Process::waitpid2(pid)
-      [status.exitstatus, stderr.read, stdout.read]
+      so = sr = ''
+      status = Open4::popen4(cmd) { |pid, stdin, stdout, stderr|
+        so = stdout.read
+        sr = stderr.read
+      }
+      [status.exitstatus, sr, so]
     end
 
     def self.gem_dir_system

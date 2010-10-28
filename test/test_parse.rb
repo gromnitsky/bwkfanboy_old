@@ -27,6 +27,6 @@ class TestParse < MiniTest::Unit::TestCase
     r = Bwkfanboy::Utils.cmd_run("#{cmd CMD} #{@tpath}plugins/bwk.rb < #{@tpath}semis/bwk.html")
     assert_equal(0, r[0])
     # bin/bwkfanboy_parse test/plugins/bwk.rb < test/semis/bwk.html | md5
-    assert_equal('87127bb148b15e03adaee51f8ca839e2', Digest::MD5.hexdigest(r[2]))
+    assert_equal('371fb5a5c5b5519b5eff085df2d31e18', Digest::MD5.hexdigest(r[2]))
   end
 end

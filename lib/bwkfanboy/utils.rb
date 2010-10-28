@@ -7,7 +7,7 @@ require 'active_support/core_ext/module/attribute_accessors'
 module Bwkfanboy
   module Meta
     NAME = 'bwkfanboy'
-    VERSION = '0.1.2'
+    VERSION = '0.1.3'
     USER_AGENT = "#{NAME}/#{VERSION} (#{RUBY_PLATFORM}; N; #{Encoding.default_external.name}; #{RUBY_ENGINE}; rv:#{RUBY_VERSION}.#{RUBY_PATCHLEVEL})"
     PLUGIN_CLASS = 'Page'
     DIR_TMP = "/tmp/#{Meta::NAME}/#{ENV['USER']}"
@@ -113,6 +113,10 @@ module Bwkfanboy
         o = OptionParser.new
         o.banner = banner
         o.on('-v', 'Be more verbose.') { |i| Bwkfanboy::Utils.cfg[:verbose] += 1 }
+        o.on('-V', 'Show version & exit.') { |i|
+          puts Bwkfanboy::Meta::VERSION
+          exit 0
+        }
         return o if ! simple
       end
 

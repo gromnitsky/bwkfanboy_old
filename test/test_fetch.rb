@@ -28,7 +28,7 @@ class TestFetch < MiniTest::Unit::TestCase
     r = Bwkfanboy::Utils.cmd_run("echo #{@tpath}semis/bwk.html | #{cmd CMD}")
     assert_equal(0, r[0])
     # MD5 (html/bwk.html) = c8259a358dd7261a79b226985d3e8753
-    assert_equal(Digest::MD5.hexdigest(r[2]), 'c8259a358dd7261a79b226985d3e8753')
+    assert_equal(Digest::MD5.hexdigest(r[2]), '00cc906c59c0eb11c3eaa8166dab729f')
   end
   
 end

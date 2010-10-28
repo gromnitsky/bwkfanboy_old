@@ -88,7 +88,6 @@ o.on('-i', 'Show some info about the plugin') { |i| $conf[:mode] = 'info' }
 o.on('-l', 'List all plugins') { |i| $conf[:mode] = 'list' }
 o.on('-p', 'List all plugins paths') { |i| $conf[:mode] = 'path' }
 o.on('-D', '(ignore this) Use URI_DEBUG const instead URI in plugins') { |i| $conf[:mode] = 'debug' }
-o.on('-V', 'Show version & exit.') { |i| $conf[:mode] = 'version' }
 Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], o) # run cl parser
 
 plugin = Plugin.new(ARGV[0])

@@ -1,0 +1,25 @@
+# -*-ruby-*-
+
+require 'open-uri'
+
+LINKS = 'links.txt'
+
+desc "fetch all pages found in #{LINKS} file"
+task :default do
+  File.open(LINKS) { |fp|
+    n = 0
+    while line = fp.gets
+      n += 1
+      next if (line =~ /^\s*#/ || line =~ /^\s*$/)
+      a = line.split
+      fail "invalid line #{n}" if a.length != 2
+
+      rm a[0]
+      printf "fetching #{a[1]}... "
+      open(a[1]) {|remote|
+        open(a[0], 'w+') {|out| out.puts remote.read }
+      }
+      puts 'OK'
+    end
+  }
+end

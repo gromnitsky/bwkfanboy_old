@@ -1,0 +1,3 @@
+# output_file URL
+quora.html http://www.quora.com/Brandon-Smietana/answers
+bwk.html http://www.dailyprincetonian.com/advanced_search/?author=Brian+Kernighan

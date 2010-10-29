@@ -4,8 +4,11 @@ require 'open-uri'
 
 LINKS = 'links.txt'
 
-desc "fetch all pages found in #{LINKS} file"
+desc "fetch pages found in #{LINKS} file; (filter with 't=page')"
 task :default do
+  if ENV['t'] =~ /^\s*$/ || !ENV.key?('t') then ENV['t'] = '.*' end
+
+  stng = false
   File.open(LINKS) { |fp|
     n = 0
     while line = fp.gets
@@ -13,13 +16,20 @@ task :default do
       next if (line =~ /^\s*#/ || line =~ /^\s*$/)
       a = line.split
       fail "invalid line #{n}" if a.length != 2
+      next if (a[0] !~ Regexp::new(ENV['t']))
 
-      rm a[0]
-      printf "fetching #{a[1]}... "
+      rm(a[0], force: true)
+      printf "fetching '#{a[1]}'... "
       open(a[1]) {|remote|
         open(a[0], 'w+') {|out| out.puts remote.read }
+        stng = true
       }
       puts 'OK'
     end
   }
+
+  if !stng
+    STDERR.puts 'No matching fetch targets found.'
+    exit 1
+  end
 end

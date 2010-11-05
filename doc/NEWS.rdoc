@@ -2,6 +2,11 @@
 
 - See git log.
 
+=== 0.1.4
+
+- bwkfanboy_server now inserts a Last-Modified header.
+- Updated tests for Ruby 1.9.2.
+
 === 0.1.3
 
 - Updated Quora plugin.

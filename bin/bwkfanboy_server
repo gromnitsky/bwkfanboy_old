@@ -37,6 +37,7 @@
 
 require 'shellwords'
 require 'webrick'
+require 'date'
 require_relative '../lib/bwkfanboy/utils'
 
 $conf = {
@@ -78,8 +79,14 @@ class FeedServlet < WEBrick::HTTPServlet::AbstractServlet # :nodoc: all
       if r[0] != 0 then
         raise WEBrick::HTTPStatus::InternalServerError.new("Errors in the pipeline:\n\n #{r[1]}")
       end
-      
+
       res.body = r[2]
+      
+      # search for <updated> tag and set Last-Modified header
+      if (m = r[2].match('<updated>(.+?)</updated>'))
+        res['Last-Modified'] = DateTime.parse(m.to_s).httpdate
+      end
+      
     else
       raise WEBrick::HTTPStatus::InternalServerError.new("Parameter 'p' required")
     end

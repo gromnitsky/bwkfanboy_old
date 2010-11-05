@@ -19,7 +19,7 @@ if ARGV.size == 0 then
   abort($conf[:banner])
 else
   Bwkfanboy::Utils.plugin_load(ARGV[0], Bwkfanboy::Meta::PLUGIN_CLASS)
-end;
+end
 
 opt = Bwkfanboy::Utils.plugin_opts(ARGV)
 pn = Page.new(opt)

@@ -7,7 +7,7 @@ require 'active_support/core_ext/module/attribute_accessors'
 module Bwkfanboy
   module Meta
     NAME = 'bwkfanboy'
-    VERSION = '0.1.3'
+    VERSION = '0.1.4'
     USER_AGENT = "#{NAME}/#{VERSION} (#{RUBY_PLATFORM}; N; #{Encoding.default_external.name}; #{RUBY_ENGINE}; rv:#{RUBY_VERSION}.#{RUBY_PATCHLEVEL})"
     PLUGIN_CLASS = 'Page'
     DIR_TMP = "/tmp/#{Meta::NAME}/#{ENV['USER']}"
@@ -89,7 +89,7 @@ module Bwkfanboy
         # TODO get rid of eval()
         fail "class #{class_name} isn't defined" if (! eval("defined?#{class_name}") || ! eval(class_name).is_a?(Class) )
       rescue LoadError
-        errx(1, "cannot load plugin '#{path}'");
+        errx(1, "cannot load plugin '#{path}' #{$!}");
       rescue Exception
         errx(1, "plugin '#{path}' has errors: #{$!}\n\nBacktrace:\n\n#{$!.backtrace.join("\n")}")
       end

@@ -1,6 +1,3 @@
-#!/usr/bin/env ruby19
-
-require 'minitest/autorun'
 require 'digest/md5'
 
 require_relative '../lib/bwkfanboy/utils'
@@ -24,9 +21,9 @@ class TestParse < MiniTest::Unit::TestCase
 
   def test_plugin_parse
     cmd CMD
-    r = Bwkfanboy::Utils.cmd_run("#{cmd CMD} #{Dir.pwd}/#{@tpath}plugins/bwk.rb < #{@tpath}semis/bwk.html")
+    r = Bwkfanboy::Utils.cmd_run("#{cmd CMD} #{Dir.pwd}/#{@tpath}../lib/bwkfanboy/plugins/bwk.rb < #{@tpath}semis/bwk.html")
     assert_equal(0, r[0])
-    # bin/bwkfanboy_parse `pwd`test/plugins/bwk.rb < test/semis/bwk.html | md5
-    assert_equal('85fef4dfdd5e01ded08fa8169d806ca7', Digest::MD5.hexdigest(r[2]))
+    # bin/bwkfanboy_parse `pwd`/lib/bwkfanboy/plugins/bwk.rb < test/semis/bwk.html | md5
+    assert_equal('a433a4a27bafb060a41aa85a40808056', Digest::MD5.hexdigest(r[2]))
   end
 end

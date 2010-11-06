@@ -1,10 +1,7 @@
-#!/usr/bin/env ruby19
-
-require 'minitest/autorun'
 require 'digest/md5'
 
 require_relative '../lib/bwkfanboy/utils'
-require_relative 'ts_utils.rb'
+require_relative 'ts_utils'
 
 # TODO add HTTP 404 check; drop connection from server during HTTP 200
 # replay...

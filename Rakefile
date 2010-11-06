@@ -9,12 +9,12 @@ require 'rake/testtask'
 spec = Gem::Specification.new() {|i|
   i.name = "bwkfanboy"
   i.summary = 'A converter from HTML to Atom feed that you can use to watch sites that do not provide its own feed.'
-  i.version = '0.1.4'
+  i.version = `bin/#{i.name} -V`
   i.author = 'Alexander Gromnitsky'
   i.email = 'alexander.gromnitsky@gmail.com'
-  i.homepage = 'http://github.com/gromnitsky/bwkfanboy'
+  i.homepage = "http://github.com/gromnitsky/#{i.name}"
   i.platform = Gem::Platform::RUBY
-  i.required_ruby_version = '>= 1.9'
+  i.required_ruby_version = '>= 1.9.2'
   i.files = FileList['lib/**/*', 'bin/*', 'doc/*', '[A-Z]*', 'test/**/*']
 
   i.executables = FileList['bin/*'].gsub(/^bin\//, '')
@@ -25,7 +25,7 @@ spec = Gem::Specification.new() {|i|
   i.rdoc_options << '-m' << 'doc/README.rdoc' << '-x' << 'plugins'
   i.extra_rdoc_files = FileList['bin/*', 'doc/*']
   
-  i.add_dependency('activesupport', '>= 3.0.0')
+  i.add_dependency('activesupport', '>= 3.0.1')
   i.add_dependency('nokogiri', '>=  1.4.3')
   i.add_dependency('open4', '>=  1.0.1')
   i.add_dependency('jsonschema', '>= 2.0.0')
@@ -43,5 +43,4 @@ Rake::RDocTask.new('doc') {|i|
 
 Rake::TestTask.new() {|i|
   i.test_files = FileList['test/test_*.rb']
-  i.verbose = true
 }

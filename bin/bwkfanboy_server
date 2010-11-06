@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby19
+#!/usr/bin/env ruby
 # -*-ruby-*-
 
 # Start a HTTP server (by default on 127.0.0.1:9042). To get Atom feeds

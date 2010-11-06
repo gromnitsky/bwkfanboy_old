@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby19
+#!/usr/bin/env ruby
 # -*-ruby-*-
 
 # This program is executed by bin/bwkfanboy_server to do all dirty work:
@@ -11,7 +11,7 @@
 #
 #   % bwkfanboy -h
 #
-# to get some basic help & read about Bwkfanboy module.
+# to get some basic help--read about Bwkfanboy module.
 
 require 'shellwords'
 require_relative '../lib/bwkfanboy/parser'

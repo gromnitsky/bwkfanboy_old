@@ -1,6 +1,3 @@
-#!/usr/bin/env ruby19
-
-require 'minitest/autorun'
 require 'digest/md5'
 
 require_relative '../lib/bwkfanboy/utils'

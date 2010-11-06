@@ -1,11 +1,11 @@
-#!/usr/bin/env ruby19
+#!/usr/bin/env ruby
 # -*-ruby-*-
 
-# Take 1 command line parameter: a full path to a plugin.
+# Takes 1 command line parameter: a full path to a plugin.
 #
-# Read stdin for a HTML, parse it and print the result to stdout in JSON
-# format. If '-vv' command line parameters were given, output will be in
-# 'key: value' pairs and <em>not</em> in JSON.
+# Reads stdin for a HTML, parses it and prints the result to stdout in
+# JSON format. If '-vv' command line parameters were given, output will
+# be in 'key: value' pairs and <em>not</em> in JSON.
 
 require_relative '../lib/bwkfanboy/parser'
 

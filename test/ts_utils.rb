@@ -1,3 +1,11 @@
+# don't run test automatically
+# if they were invoked as 'gem check -t ...'
+if $0 =~ /gem/
+  require 'minitest/unit'
+else
+  require 'minitest/autorun'
+end
+
 # return the right directory for _c_
 def cmd(c)
   @tpath = ''

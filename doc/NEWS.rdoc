@@ -1,10 +1,8 @@
-=== Current
-
-- See git log.
-
 === 0.1.4
 
+- The minimum required Ruby version is 1.9.2.
 - bwkfanboy_server now inserts a Last-Modified header.
+- Fixed (?) a bug in bwkfanboy_generate with external encoding.
 - Updated tests for Ruby 1.9.2.
 
 === 0.1.3

@@ -1,8 +1,8 @@
-#!/usr/bin/env ruby19
+#!/usr/bin/env ruby
 # -*-ruby-*-
 
 # Read stdin for a URI or a full path to the local file, download it (or
-# read for the local file) and print to stdout.
+# read from the local file) and print the result to stdout.
 
 require 'open-uri'
 

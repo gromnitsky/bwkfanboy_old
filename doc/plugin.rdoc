@@ -3,10 +3,9 @@
 First of all, look at examples provided with bwkfanboy. They were
 intended to be 100% working because I was writing them for myself.
 
-Basically, all you need is to write a class named _Page_ that
-inherits this class Bwkfanboy::Parse, override in the child #myparse
-method and write a simple module named _Meta_ inside your _Page_
-class.
+Basically, all you need is to write a class named _Page_ that inherits
+class Bwkfanboy::Parse, override in the child \#myparse method and write
+a simple module named _Meta_ inside your _Page_ class.
 
 == Skeleton
 
@@ -52,8 +51,8 @@ it should.
 
 === \Meta
 
-Module _Meta_ can have only constants--and *all* constants listed in
-the skeleton are required.
+Module _Meta_ can only have constants--and *all* constants listed in the
+skeleton are mandatory.
 
 * <tt>URI</tt>--can be a <tt>http(s)://</tt> or <tt>ftp://</tt> URL
   or just a path to a file on your local machine, as
@@ -75,13 +74,17 @@ the skeleton are required.
 
 === myparse
 
-In #myparse method please read stdin. The contends of it is the raw
+In \#myparse method please read stdin. The contends of it is the raw
 HTML you want to parse. The general idea:
 
-* Atom feed must contain at least 1 entry, so look in HTML for some
-  crap which you break into 5 peaces: title of the entry, link for
-  it, a date for the entry, who is author of the entry and its
-  contents.
+* Atom feed must contain at least 1 entry, so look in the HTML for some
+  crap which you must break into 5 peaces:
+
+  - a title of the entry
+  - a link for it
+  - a date for the entry
+  - who is the author of the entry and
+  - its contents.
 
 * After you scan and grab 1 entry, create a hash and add it to
   _self_ as it was in the skeleton:
@@ -89,20 +92,20 @@ HTML you want to parse. The general idea:
     self << { title: t, link: l, updated: u, author: a, content: c }
 
   Here variables _t_, _l_, _u_, _a_ and _c_ contains the actual
-  values of 5 peaces for the entry. Names of the keys in hash are
+  value of 5 peaces for the entry. Names of the keys in the hash are
   important of course--don't invent your own.
 
-* There would be probably more crap in HTML that you can use to
+* Probably there would be more crap in the HTML that you can use to
   construct another entry. Keep parsing and adding entries.
 
-* While you scanning, use the 2 helper methods for cleaning each
-  peace: \#clean, which removed duplicate spaces and #date, which
-  parses a sting and return a date in ISO8601 format. You may
-  override #date method if you like.
+* While you're scanning, use the 2 helper methods for cleaning each
+  peace: \#clean, which removed duplicate spaces and \#date, which parses
+  a string and return a date in ISO8601 format. You may override \#date
+  method if you like.
 
 === Options
 
-Plugins can have _options_ and a user should provide then to the plugin
+Plugins can have _options_ and a user should provide them to the plugin
 in the real-time. For example, say you're scraping a site where many
 users are wasting their time. If you want to watch for several of them
 it is silly to write a new plugin every time for a new
@@ -130,19 +133,19 @@ _option_ becomes mandatory for the end-user.
 To test how nice your plugin works, save the html page to the file
 and type:
 
-  % bwkfanboy_parse -vv /path/to/a/plugin.rb < saved_page.html
+  % bwkfanboy_parse -vv /path/to/the/plugin.rb < saved_page.html
 
 to see the result as in plain text, or
 
-  % bwkfanboy_parse -v /path/to/a/plugin.rb < saved_page.html
+  % bwkfanboy_parse -v /path/to/the/plugin.rb < saved_page.html
 
-as pretty JSON.
+as a pretty JSON.
 
 For option-enabled plugins, supply additional parameters for them after
 the plugin path:
 
   % bwkfanboy_parse -vv /path/to/the/plugin.rb \
-    option_1 "options 2" < saved_page.html
+    option_1 "option 2" < saved_page.html
 
 <tt>bwkfanboy_parse</tt> return 0 if no errors occurred or >= 1 if you
 have errors in your plugin code. N.B.: the output from

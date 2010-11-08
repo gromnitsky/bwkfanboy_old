@@ -8,16 +8,16 @@ class Page < Bwkfanboy::Parse
     URI = 'http://www.dailyprincetonian.com/advanced_search/?author=Brian+Kernighan'
     URI_DEBUG = '/home/alex/lib/software/alex/bwkfanboy/test/semis/bwk.html'
     ENC = 'UTF-8'
-    VERSION = 1
+    VERSION = 2
     COPYRIGHT = "See bwkfanboy's LICENSE file"
     TITLE = "Brian Kernighan's articles from Daily Princetonian"
     CONTENT_TYPE = 'html'
   end
   
-  def myparse()
+  def myparse(stream)
     url = "http://www.dailyprincetonian.com"
 
-    doc = Nokogiri::HTML(STDIN, nil, Meta::ENC)
+    doc = Nokogiri::HTML(stream, nil, Meta::ENC)
     doc.xpath("//div[@class='article_item']").each {|i|
       t = clean(i.xpath("h2/a").children.text())
       fail 'unable to extract link' if (link = clean(i.xpath("h2/a")[0].attributes['href'].value()).empty?)

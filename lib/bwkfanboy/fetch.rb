@@ -6,7 +6,7 @@ module Bwkfanboy
   class Fetch
 
     # If no block given, return contents of fetch'ed URI. Otherwise,
-    # pass the current line to the block.
+    # execute the block with 1 parameter--stream.
     def self.cat(uri)
       uri.chomp!
 
@@ -19,7 +19,7 @@ module Bwkfanboy
           end
           Bwkfanboy::Utils.veputs(1, "charset = #{f.content_type_parse[1][1]}\n") if defined?(f.meta)
           if block_given?
-            f.each_line {|i| yield i }
+            yield f
           else
             return f.read
           end

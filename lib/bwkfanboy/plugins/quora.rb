@@ -17,17 +17,17 @@ class Page < Bwkfanboy::Parse
     URI = 'http://www.quora.com/#{opt[0]}/answers'
     URI_DEBUG = '/home/alex/lib/software/alex/bwkfanboy/test/semis/quora.html'
     ENC = 'UTF-8'
-    VERSION = 4
+    VERSION = 5
     COPYRIGHT = "See bwkfanboy's LICENSE file"
     TITLE = "Last n answers (per-user) from Quora; requires nodejs"
     CONTENT_TYPE = 'html'
   end
   
-  def myparse()
+  def myparse(stream)
     profile = opt[0] # for example, 'Brandon-Smietana'
     
     # read stdin
-    doc = Nokogiri::HTML(STDIN, nil, Meta::ENC)
+    doc = Nokogiri::HTML(stream, nil, Meta::ENC)
 
     # extract & evaluate JavaScript into tstp
     tstp = nil

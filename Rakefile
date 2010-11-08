@@ -23,7 +23,7 @@ spec = Gem::Specification.new() {|i|
   i.test_files = FileList['test/test_*.rb']
   
   i.rdoc_options << '-m' << 'doc/README.rdoc' << '-x' << 'plugins'
-  i.extra_rdoc_files = FileList['bin/*', 'doc/*']
+  i.extra_rdoc_files = FileList['doc/*']
   
   i.add_dependency('activesupport', '>= 3.0.1')
   i.add_dependency('nokogiri', '>=  1.4.3')
@@ -37,7 +37,7 @@ task(default: %(repackage))
 
 Rake::RDocTask.new('doc') {|i|
   i.main = 'doc/README.rdoc'
-  i.rdoc_files = FileList['doc/*', 'lib/**/*.rb', 'bin/*']
+  i.rdoc_files = FileList['doc/*', 'lib/**/*.rb']
   i.rdoc_files.exclude("lib/**/plugins")
 }
 

@@ -1,12 +1,6 @@
 #!/usr/bin/env ruby
 # -*-ruby-*-
 
-# Read stdin for JSON, generate from it an Atom feed and print the
-# result to stdout in UTF-8.
-#
-# One can validate the JSON by providing '--check' command line option
-# (by default the validating is off).
-
 require_relative '../lib/bwkfanboy/generate'
 
 $conf = {

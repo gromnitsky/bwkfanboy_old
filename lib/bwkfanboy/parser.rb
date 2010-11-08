@@ -18,10 +18,10 @@ module Bwkfanboy
     end
 
     # Invokes #myparse & checks if it has grabbed something.
-    def parse()
+    def parse(stream)
       @entries = []
       begin
-        myparse()
+        myparse(stream)
       rescue
         @entries = []
         Utils.errx(1, "parsing failed: #{$!}\n\nBacktrace:\n\n#{$!.backtrace.join("\n")}")
@@ -99,7 +99,7 @@ module Bwkfanboy
     protected
 
     # This *must* be overridden in the child.
-    def myparse(input = STDIN)
+    def myparse(stream)
       raise "plugin isn't finished yet"
     end
 

@@ -137,13 +137,10 @@ else
   require_relative '../lib/bwkfanboy/generate'
 
   # 1. fetch & parse
-  pipe = IO.popen('cat', 'w+')
-  STDIN.reopen(pipe)
-  pipe.puts Bwkfanboy::Fetch.cat(!$conf[:debug] ? pn.uri() : pn.class::Meta::URI_DEBUG)
-  pipe.close
-
   pn = Page.new(opt)
-  pn.parse()
+  Bwkfanboy::Fetch.cat(!$conf[:debug] ? pn.uri() : pn.class::Meta::URI_DEBUG) {|stream|
+    pn.parse(stream)
+  }
   
   if Bwkfanboy::Utils.cfg[:verbose] >= 2 then
     pn.dump()

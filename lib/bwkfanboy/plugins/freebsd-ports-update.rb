@@ -5,7 +5,7 @@ class Page < Bwkfanboy::Parse
     URI = '/usr/ports/UPDATING'
     URI_DEBUG = URI
     ENC = 'ASCII'
-    VERSION = 1
+    VERSION = 2
     COPYRIGHT = "See bwkfanboy's LICENSE file"
     TITLE = "News from FreeBSD ports"
     CONTENT_TYPE = 'text'
@@ -24,7 +24,7 @@ class Page < Bwkfanboy::Parse
     return t
   end
   
-  def myparse()
+  def myparse(stream)
     re_u = /^(\d{8}):$/
     re_t1 = /^ {2}AFFECTS:\s+(.+)$/
     re_t2 = /^\s+(.+)$/
@@ -33,7 +33,7 @@ class Page < Bwkfanboy::Parse
     ready = false
     mode = nil
     t = l = u = a = c = nil
-    while line = STDIN.gets
+    while line = stream.gets
       line.rstrip!
 
       if line =~ re_u then

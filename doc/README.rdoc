@@ -11,6 +11,9 @@ general assistance.
 than the whole gem on rubygems.org, so grab the source before
 struggling).
 
+Plugins from version 1.1.4 are *incompatible* with the 0.1.x
+series. Please read doc/plugins.rdoc.
+
 = Architecture
 
 == Plugins
@@ -89,7 +92,7 @@ There are 2 method to get an Atom feed via HTTP:
 
 2. Small *bwkfanboy_server* HTTP server. It can run from any user and
    thus is able to inherit env variables for discovering your HOME
-   directory. Read bin/bwkfanboy_server to know how to operate it.
+   directory. Read doc/bwkfanboy_server.rdoc to know how to operate it.
 
 = License
 :include: doc/LICENSE

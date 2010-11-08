@@ -1,3 +1,14 @@
+=== 1.1.4
+
+- INCOMPATIBILITY: from now on, all plugins must do NOT read the stdin
+  but bwkfanboy's provided stream. See doc/plugins.rdoc.
+
+- Moved the code from bwkfanboy_* to libraries.
+
+- From now on, bwkfanboy util by default do not run utils in a pipe but
+  uses libraries directly. One can restore the old functionality with
+  '-O' CL swith.
+
 === 0.1.4
 
 - The minimum required Ruby version is 1.9.2.

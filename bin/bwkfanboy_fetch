@@ -8,4 +8,6 @@ $conf = { banner: "Usage: #{File.basename($0)} [options] < uri" }
 Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], nil, true)
 
 uri = gets
-Bwkfanboy::Fetch.cat(uri) {|line| puts line }
+Bwkfanboy::Fetch.cat(uri) {|f|
+  f.each_line {|line| puts line }
+}

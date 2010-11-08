@@ -23,9 +23,9 @@ Here is a skeleton of a plugin:
       CONTENT_TYPE = 'html'
     end
  
-    def myparse()
-      # read stdin and parse it
-      doc = Nokogiri::HTML(STDIN, nil, Meta::ENC)
+    def myparse(stream)
+      # read 'stream' IO object and parse it
+      doc = Nokogiri::HTML(stream, nil, Meta::ENC)
       doc.xpath("XPATH QUERY").each {|i|
         t = clean(i.xpath("XPATH QUERY").text())
         l = clean(i.xpath("XPATH QUERY").text())
@@ -74,8 +74,8 @@ skeleton are mandatory.
 
 === myparse
 
-In \#myparse method please read stdin. The contends of it is the raw
-HTML you want to parse. The general idea:
+In \#myparse method read 'stream' IO object. The contents of it is the
+raw HTML you want to parse. The general idea:
 
 * Atom feed must contain at least 1 entry, so look in the HTML for some
   crap which you must break into 5 peaces:

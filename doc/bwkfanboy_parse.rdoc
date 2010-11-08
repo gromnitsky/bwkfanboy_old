@@ -1,0 +1,7 @@
+= bwkfanboy_parse
+
+Takes 1 command line parameter: a full path to a plugin.
+
+Reads stdin for a HTML, parses it and prints the result to stdout in
+JSON format. If '-vv' command line parameters were given, output will
+be in 'key: value' pairs and <em>not</em> in JSON.

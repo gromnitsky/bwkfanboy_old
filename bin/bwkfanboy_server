@@ -1,40 +1,6 @@
 #!/usr/bin/env ruby
 # -*-ruby-*-
 
-# Start a HTTP server (by default on 127.0.0.1:9042). To get Atom feeds
-# from it, initiate GET request with URI
-#   
-#   http://localhost:9042/?p=PLUGIN
-#
-# where +PLUGIN+ is a name of a bwkfanboy's plugin (without '.re' suffix).
-# If the plugin requires additional options you can specify them like:
-#
-#   http://localhost:9042/?p=PLUGIN&o=opt1%20%22opt2%20has%20spaces%22
-#
-# where <tt>opt1%20%22opt2%20has%20spaces%22</tt> is a encoded string
-# <tt>opt1 "opt2 has spaces"</tt>.
-#
-# To list all available plugins, point you browser to
-#
-#   http://localhost:9042/list
-#
-# The server is intended to run from a non-root user from
-# <tt>~/.login</tt> file. It can detach from a terminal if you give it
-# '-d' command line option.
-#
-# For other help, type:
-#
-#  bwkfanboy_server -h
-#
-# The server maintains 2 logs:
-#
-#   /tmp/bwkfanboy/USER/log/bwkfanboy_server.log
-#   /tmp/bwkfanboy/USER/log/bwkfanboy_server-access.log
-#
-# The file with a pid:
-#
-#   /tmp/bwkfanboy/USER/bwkfanboy_server.pid
-
 require 'shellwords'
 require 'webrick'
 require 'date'

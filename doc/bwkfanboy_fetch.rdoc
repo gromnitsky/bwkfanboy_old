@@ -1,0 +1,4 @@
+= bwkfanboy_fetch
+
+Read stdin for a URI or a full path to the local file, download it (or
+read from the local file) and print the result to stdout.

@@ -8,7 +8,7 @@ module Bwkfanboy
 
   # :include: ../../doc/plugin.rdoc
   class Parse
-    ENTRIES_MAX = 64
+    ENTRIES_MAX = 128
 
     attr_reader :opt
     

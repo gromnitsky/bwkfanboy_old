@@ -2,7 +2,7 @@
 
 Start a HTTP server (by default on 127.0.0.1:9042). To get Atom feeds
 from it, initiate GET request with URI
-  
+
   http://localhost:9042/?p=PLUGIN
 
 where +PLUGIN+ is a name of a bwkfanboy's plugin (without '.re' suffix).

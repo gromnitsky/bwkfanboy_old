@@ -12,7 +12,8 @@ than the whole gem on rubygems.org, so grab the source before
 struggling).
 
 Plugins from version 1.1.4 are *incompatible* with the 0.1.x
-series. Please read doc/plugins.rdoc.
+series. Please reread in doc/plugin.rdoc the example of the skeleton
+plugin.
 
 = Architecture
 
@@ -21,10 +22,10 @@ series. Please read doc/plugins.rdoc.
 bwkfanboy comes with several plugins. One of them, for example, parses a
 search page of dailyprincetonian.com looking for bwk's articles.
 
-The plugin is a Ruby class +Page+ that inherits Bwkfanboy::Parse
-parent, overriding 1 method.
+The plugin is a Ruby class +Page+ that inherits Bwkfanboy::Parse parent,
+overriding 1 method.
 
-The plugins can be in the system
+Plugins can be in system
 
   `gem env gemdir`/gems/bwkfanboy-x.y.z/lib/bwkfanboy/plugins
 

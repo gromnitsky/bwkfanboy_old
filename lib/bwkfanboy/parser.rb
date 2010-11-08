@@ -99,7 +99,7 @@ module Bwkfanboy
     protected
 
     # This *must* be overridden in the child.
-    def myparse()
+    def myparse(input = STDIN)
       raise "plugin isn't finished yet"
     end
 

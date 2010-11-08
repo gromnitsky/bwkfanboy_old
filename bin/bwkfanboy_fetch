@@ -1,30 +1,11 @@
 #!/usr/bin/env ruby
 # -*-ruby-*-
 
-# Read stdin for a URI or a full path to the local file, download it (or
-# read from the local file) and print the result to stdout.
-
-require 'open-uri'
-
-require_relative '../lib/bwkfanboy/utils'
+require_relative '../lib/bwkfanboy/fetch'
 
 $conf = { banner: "Usage: #{File.basename($0)} [options] < uri" }
 
 Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], nil, true)
 
-uri = gets.chomp()
-
-Bwkfanboy::Utils.veputs(1, "fetching #{uri}\n")
-
-begin
-  open(uri, "User-Agent" => Bwkfanboy::Meta::USER_AGENT) {|f|
-    if defined?(f.meta) && f.status[0] != '200' then
-      Bwkfanboy::Utils.errx(1, "cannot fetch #{uri} : HTTP responce: #{f.status[0]}")
-    end
-    Bwkfanboy::Utils.veputs(1, "charset = #{f.content_type_parse[1][1]}\n") if defined?(f.meta)
-    f.each_line {|i| puts i}
-  }
-rescue
-  # typically Errno::ENOENT
-  Bwkfanboy::Utils.errx(1, "cannot fetch: #{$!}");
-end
+uri = gets
+Bwkfanboy::Fetch.cat(uri) {|line| puts line }

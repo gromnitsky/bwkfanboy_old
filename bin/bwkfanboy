@@ -17,7 +17,8 @@ require 'shellwords'
 require_relative '../lib/bwkfanboy/parser'
 
 $conf = {
-  mode: 'pipe',
+  mode: 'fast',
+  debug: false,
   banner: "Usage: #{File.basename($0)} [options] plugin-name"
 }
 
@@ -87,7 +88,8 @@ o = Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner]) # create OptionParser object
 o.on('-i', 'Show some info about the plugin') { |i| $conf[:mode] = 'info' }
 o.on('-l', 'List all plugins') { |i| $conf[:mode] = 'list' }
 o.on('-p', 'List all plugins paths') { |i| $conf[:mode] = 'path' }
-o.on('-D', '(ignore this) Use URI_DEBUG const instead URI in plugins') { |i| $conf[:mode] = 'debug' }
+o.on('-O', '(ignore this) Execute all bwkfanboy_* utils in a pipe') { |i| $conf[:mode] = 'pipe' }
+o.on('-D', '(ignore this) Use URI_DEBUG const instead URI in plugins') { |i| $conf[:debug] = true }
 Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], o) # run cl parser
 
 plugin = Plugin.new(ARGV[0])
@@ -107,12 +109,11 @@ when 'info'
   plugin.load(opt).dump_info
 when 'version'
   puts Bwkfanboy::Meta::VERSION
-else
-  # A pipe mode
+when 'pipe'
   pn = plugin.load(opt)
   cmd = "./bwkfanboy_fetch | ./bwkfanboy_parse '#{plugin.path}' #{opt.size != 0 ? Shellwords.join(opt) : ''} | ./bwkfanboy_generate"
   if Bwkfanboy::Utils.cfg[:verbose] >= 2 then
-    puts ($conf[:mode] != 'debug' ? pn.uri() : pn.class::Meta::URI_DEBUG)
+    puts (!$conf[:debug] ? pn.uri() : pn.class::Meta::URI_DEBUG)
     puts cmd
     exit 0
   end
@@ -121,10 +122,34 @@ else
   Dir.chdir(File.dirname(File.expand_path($0)))
   
   pipe = IO.popen(cmd, 'w+')
-  pipe.puts ($conf[:mode] != 'debug' ? pn.uri : pn.class::Meta::URI_DEBUG)
+  pipe.puts (!$conf[:debug] ? pn.uri : pn.class::Meta::URI_DEBUG)
   pipe.close_write
   while line = pipe.gets
     puts line
   end
   pipe.close
+  
+else
+  # a 'new', faster way
+  pn = plugin.load(opt)
+
+  require_relative '../lib/bwkfanboy/fetch'
+  require_relative '../lib/bwkfanboy/generate'
+
+  # 1. fetch & parse
+  pipe = IO.popen('cat', 'w+')
+  STDIN.reopen(pipe)
+  pipe.puts Bwkfanboy::Fetch.cat(!$conf[:debug] ? pn.uri() : pn.class::Meta::URI_DEBUG)
+  pipe.close
+
+  pn = Page.new(opt)
+  pn.parse()
+  
+  if Bwkfanboy::Utils.cfg[:verbose] >= 2 then
+    pn.dump()
+    exit 0
+  end
+  
+  # 2.generate
+  puts Bwkfanboy::Generate.atom(JSON.parse(pn.to_json))
 end

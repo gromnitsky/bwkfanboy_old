@@ -38,6 +38,10 @@ Here is a skeleton of a plugin:
     end
   end
 
+You can get the skeleton in the current directory by typing:
+
+  % bwkfanboy -t myplugin.rb
+
 As you see, we are using Nokogiri for HTML parsing. You are not
 required to use it too--take the parser whatever you like. Nokogiri
 is nice, because it's able to read a broken HTML and search thought

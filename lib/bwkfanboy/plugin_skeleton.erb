@@ -1,0 +1,30 @@
+# This is a skeleton for a <%= Bwkfanboy::Meta::NAME %> <%= Bwkfanboy::Meta::VERSION %> plugin.  To understand how
+# plugins work please read doc/plugins.rdoc file from <%= Bwkfanboy::Meta::NAME %>'s
+# distribution.
+
+require 'nokogiri'
+
+class Page < Bwkfanboy::Parse
+  module Meta
+    URI = 'http://example.org/news'
+    ENC = 'UTF-8'
+    VERSION = 1
+    COPYRIGHT = '(c) <%= DateTime.now.year %> <%= Etc.getpwuid(Process.euid)[:gecos] %>'
+    TITLE = "News from example.org"
+    CONTENT_TYPE = 'html'
+  end
+  
+  def myparse(stream)
+    # read 'stream' IO object and parse it
+    doc = Nokogiri::HTML(stream, nil, Meta::ENC)
+    doc.xpath("XPATH QUERY").each {|i|
+      t = clean(i.xpath("XPATH QUERY").text())
+      l = clean(i.xpath("XPATH QUERY").text())
+      u = date(i.xpath("XPATH QUERY").text())
+      a = clean(i.xpath("XPATH QUERY").text())
+      c = clean(i.xpath("XPATH QUERY").text())
+      
+      self << { title: t, link: l, updated: u, author: a, content: c }
+    }
+  end
+end

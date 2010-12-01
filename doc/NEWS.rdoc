@@ -1,3 +1,9 @@
+=== 1.2.5
+
+- Added '-t' CL option for bwkfanboy util.
+
+- Updated quora plugin.
+
 === 1.1.4
 
 - INCOMPATIBILITY: from now on, all plugins must do NOT read the stdin

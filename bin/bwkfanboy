@@ -18,6 +18,8 @@ require_relative '../lib/bwkfanboy/parser'
 
 $conf = {
   mode: 'fast',
+  skeleton_name: 'bwkfanboy_plugin_skeleton.rb',
+  skeleton: Bwkfanboy::Utils.gem_dir_system() + '/plugin_skeleton.erb',
   debug: false,
   banner: "Usage: #{File.basename($0)} [options] plugin-name"
 }
@@ -88,6 +90,10 @@ o = Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner]) # create OptionParser object
 o.on('-i', 'Show some info about the plugin') { |i| $conf[:mode] = 'info' }
 o.on('-l', 'List all plugins') { |i| $conf[:mode] = 'list' }
 o.on('-p', 'List all plugins paths') { |i| $conf[:mode] = 'path' }
+o.on('-t FILE', 'Write to the FILE a skeleton for a plugin') { |i|
+  $conf[:mode] = 'template'
+  $conf[:skeleton_name] = i if i !~ /^\s*$/
+}
 o.on('-O', '(ignore this) Execute all bwkfanboy_* utils in a pipe') { |i| $conf[:mode] = 'pipe' }
 o.on('-D', '(ignore this) Use URI_DEBUG const instead URI in plugins') { |i| $conf[:debug] = true }
 Bwkfanboy::Utils.cl_parse(ARGV, $conf[:banner], o) # run cl parser
@@ -96,6 +102,32 @@ plugin = Plugin.new(ARGV[0])
 opt = Bwkfanboy::Utils.plugin_opts(ARGV)
 
 case $conf[:mode]
+when 'template'
+  require 'erb'
+  require 'digest/md5'
+
+  t = ERB.new(File.read($conf[:skeleton]))
+  t.filename = $conf[:skeleton] # to report errors relative to this file
+  begin
+    md5_system = Digest::MD5.hexdigest(t.result(binding))
+  rescue Exception
+    Bwkfanboy::Utils.errx(1, "cannot read the template: #{$!}")
+  end
+
+  if ! File.exists?($conf[:skeleton_name])
+    # write a skeleton
+    begin
+      File.open($conf[:skeleton_name], 'w+') { |fp| fp.puts t.result(binding) }
+    rescue
+      Bwkfanboy::Utils.errx(1, "cannot write the skeleton: #{$!}")
+    end
+  elsif
+    # warn a careless user
+    if md5_system != Digest::MD5.file($conf[:skeleton_name]).hexdigest
+      Bwkfanboy::Utils.errx(1, "#{$conf[:skeleton_name]} already exists")
+    end
+  end
+  
 when 'list'
   plugin.dirs().each {|i|
     puts "#{i}:"

@@ -17,7 +17,7 @@ class Page < Bwkfanboy::Parse
     URI = 'http://www.quora.com/#{opt[0]}/answers'
     URI_DEBUG = '/home/alex/lib/software/alex/bwkfanboy/test/semis/quora.html'
     ENC = 'UTF-8'
-    VERSION = 8
+    VERSION = 9
     COPYRIGHT = "See bwkfanboy's LICENSE file"
     TITLE = "Last n answers (per-user) from Quora; requires nodejs"
     CONTENT_TYPE = 'html'
@@ -37,9 +37,22 @@ class Page < Bwkfanboy::Parse
         if Bwkfanboy::Utils.cfg[:verbose] >= 3
           File.open("#{File.basename(__FILE__)}-epoch.js.raw", "w+") {|i| i.puts js }
         end
-        r = Bwkfanboy::Utils.cmd_run("echo '#{js}' | #{File.dirname(__FILE__)}/quora.js")
-        fail "evaluation in nodejs failed: #{r[1]}" if r[0] != 0
-        tstp = JSON.parse(r[2])
+        # open a pipe, write js to it & read a JSON result
+        r = ''
+        begin
+          pipe = IO.popen("#{File.dirname(__FILE__)}/quora.js", 'w+')
+          pipe.puts js
+          pipe.close_write
+          while line = pipe.gets
+            r << line
+          end
+          pipe.close
+        rescue
+          fail "evaluation in nodejs failed: #{$!}"
+        end
+#        r = Bwkfanboy::Utils.cmd_run("echo '#{js}' | #{File.dirname(__FILE__)}/quora.js")
+#        fail "evaluation in nodejs failed: #{r[1]}" if r[0] != 0
+        tstp = JSON.parse r
         break
       end
     }

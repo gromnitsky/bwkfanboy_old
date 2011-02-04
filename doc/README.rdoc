@@ -1,5 +1,14 @@
 = About
 
+(<b>If you cannot install the gem via normal <tt>gem install
+bwkfanboy</tt> command</b> than go to
+https://rubygems.org/gems/bwkfanboy and click 'Download' link, save the
+file and run:
+
+  # gem install -l /where/is/your/bwkfanboy-x.y.z.gem
+
+This problem arises with rubygems 1.5.0.)
+
 bwkfanboy is a HTML to Atom feed converter that you can use to watch
 sites that do not provide its own feed.
 

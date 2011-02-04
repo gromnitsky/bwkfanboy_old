@@ -1,3 +1,7 @@
+=== 1.2.8
+
+- Updated quora plugin for nodejs 0.3.7.
+
 === 1.2.7
 
 - Fixed a bug with JavaScript parsing in quora plugin.

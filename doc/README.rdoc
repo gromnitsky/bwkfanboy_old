@@ -1,7 +1,7 @@
 = About
 
 (<b>If you cannot install the gem via normal <tt>gem install
-bwkfanboy</tt> command</b> than go to
+bwkfanboy</tt> command</b> then go to
 https://rubygems.org/gems/bwkfanboy and click 'Download' link, save the
 file and run:
 

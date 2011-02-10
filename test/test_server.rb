@@ -1,19 +1,18 @@
 require 'open-uri'
-require 'digest/md5'
 
-require_relative 'ts_utils'
+require_relative 'helper'
 
 $count = 1
 
 # this tests will mess up logs and the pid file
 class TestServer < MiniTest::Unit::TestCase
-  CMD = 'bwkfanboy_server'
+  CMD = cmd('bwkfanboy_server')
   PORT = 9042
   ADDR = '127.0.0.1'
 
   def setup
     @port = PORT + $count
-    @pid = spawn("#{cmd CMD} -D -p #{@port}")
+    @pid = spawn("#{CMD} -D -p #{@port}")
     $count += 1
     sleep(2) # wait for the server's loading
   end

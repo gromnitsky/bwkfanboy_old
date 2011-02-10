@@ -2,5 +2,6 @@
 
 - Add plugin listing to _server.
 - Several http requests to _fetch.
-- Inject falsework template.
-- econlib.org articles plugin.
++ Inject falsework template.
++ econlib.org articles plugin.
+- Rewrite Utils module to be more compatible with falsework.

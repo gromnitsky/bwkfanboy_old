@@ -13,7 +13,7 @@ plugin.
 
 = Included Plugins
 
-<% plugins.each { |i| %>  <%= i %>
+<% MyDocs.plugins.each { |i| %>  <%= i %>
 <% } %>
 
 = Installation
@@ -113,4 +113,4 @@ There are 2 method to get an Atom feed via HTTP:
 
 = License
 
-<%= File.read 'LICENSE' %>
+<%= File.read(MyDocs::PATH + 'LICENSE') %>

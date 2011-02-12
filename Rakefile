@@ -8,6 +8,7 @@ require 'rake/testtask'
 require 'json'
 
 require_relative 'test/rake_git'
+require_relative 'doc/rakefile'
 
 spec = Gem::Specification.new {|i|
   i.name = "bwkfanboy"
@@ -23,12 +24,12 @@ spec = Gem::Specification.new {|i|
 
   i.executables = FileList['bin/*'].gsub(/^bin\//, '')
   i.default_executable = i.name
-  
+
   i.test_files = FileList['test/test_*.rb']
-  
+
   i.rdoc_options << '-m' << 'doc/README.rdoc' << '-x' << 'plugins'
   i.extra_rdoc_files = FileList['doc/*.rdoc']
-  
+
   i.add_dependency('open4', '>=  1.0.1')
   i.add_dependency('activesupport', '>= 3.0.3')
   i.add_dependency('nokogiri', '>=  1.4.4')
@@ -39,36 +40,21 @@ spec = Gem::Specification.new {|i|
 
 Rake::GemPackageTask.new(spec).define
 
-task :mydocs do
-  src = 'doc'
-  
-  IO.popen("cd #{src} && rake mydocs:default") {|fp|
-    while line = fp.gets
-      puts line
-    end
-  }
-  
-  # grab generated staff and add it to the spec
-  IO.popen("cd #{src} && rake -s mydocs:print_gen") {|fp|
-    r = JSON.parse(fp.gets)
-    puts "Additional files for the spec: "
-    r.map! {|i| "#{src}/" + i }
-    r.each {|i| puts ' ' + i }
-    spec.extra_rdoc_files.concat(r)
-  }
+task gen_mydocs: ['mydocs:default'] do
+  spec.extra_rdoc_files.concat(MyDocs::RDOC_RELATIVE)
 end
 
-task default: [:mydocs, :repackage]
+task default: [:gen_mydocs, :repackage]
+task doc: [:gen_mydocs, :rdoc]
+task clobber: ['mydocs:clean']
 
-task doc: [:mydocs]
-
-Rake::RDocTask.new('doc') do |i|
-  i.main = 'doc/README.rdoc'
+Rake::RDocTask.new do |i|
   i.rdoc_files = FileList['doc/*', 'lib/**/*.rb']
   i.rdoc_files.exclude("lib/**/plugins")
+  i.main = 'doc/README.rdoc'
 end
 
 Rake::TestTask.new do |i|
-  i.test_files = FileList['test/test_*.rb'] 
+  i.test_files = FileList['test/test_*.rb']
   i.libs << '.'
 end

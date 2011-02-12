@@ -49,19 +49,12 @@ task :mydocs do
   }
   
   # grab generated staff and add it to the spec
-  IO.popen("cd #{src} && rake mydocs:print_gen") {|fp|
-    json = nil
-    while line = fp.gets
-      json = line if line !~ /\(in /        # our JSON is in 1 line
-    end
-    
-    if json
-      r = JSON.parse(json)
-      puts "Additional files for the spec: "
-      r.map! {|i| "#{src}/" + i }
-      r.each {|i| puts ' ' + i }
-      spec.extra_rdoc_files.concat(r)
-    end
+  IO.popen("cd #{src} && rake -s mydocs:print_gen") {|fp|
+    r = JSON.parse(fp.gets)
+    puts "Additional files for the spec: "
+    r.map! {|i| "#{src}/" + i }
+    r.each {|i| puts ' ' + i }
+    spec.extra_rdoc_files.concat(r)
   }
 end
 

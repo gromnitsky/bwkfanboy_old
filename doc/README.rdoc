@@ -16,7 +16,7 @@ plugin.
   NAME                 VER DESCRIPTION
 
   bwk                    2 Brian Kernighan's articles from Daily Princetonian
-  freebsd-ports-update   2 News from FreeBSD ports
+  freebsd-ports-update   3 News from FreeBSD ports
   quora                 10 Last n answers (per-user) from Quora; requires nodejs 0.3.7+
   econlib                1 Latest articles from econlib.org
 

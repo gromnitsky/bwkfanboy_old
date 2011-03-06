@@ -5,7 +5,7 @@ class Page < Bwkfanboy::Parse
     URI = '/usr/ports/UPDATING'
     URI_DEBUG = URI
     ENC = 'ASCII'
-    VERSION = 2
+    VERSION = 3
     COPYRIGHT = "See bwkfanboy's LICENSE file"
     TITLE = "News from FreeBSD ports"
     CONTENT_TYPE = 'text'
@@ -28,7 +28,7 @@ class Page < Bwkfanboy::Parse
     re_u = /^(\d{8}):$/
     re_t1 = /^ {2}AFFECTS:\s+(.+)$/
     re_t2 = /^\s+(.+)$/
-    re_a = /^ {2}AUTHOR:\s+(.+)$/
+    re_a = /^ {2}AUTHORS?:\s+(.+)$/
 
     ready = false
     mode = nil

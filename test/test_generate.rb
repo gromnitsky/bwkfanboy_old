@@ -12,7 +12,7 @@ class TestGenerate < MiniTest::Unit::TestCase
   def test_invalid_json
     r = Utils.cmd_run("echo '{\"foo\" : \"bar\"}' | #{CMD} --check")
     assert_equal(1, r[0])
-    assert_match(/channel is missing and it is not optional/, r[1])
+    assert_match(/channel:? is missing and it is not optional/, r[1])
   end
 
   def test_right_json

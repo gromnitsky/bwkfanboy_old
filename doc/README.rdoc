@@ -17,7 +17,7 @@ plugin.
 
   bwk                    2 Brian Kernighan's articles from Daily Princetonian
   freebsd-ports-update   3 News from FreeBSD ports
-  quora                 10 Last n answers (per-user) from Quora; requires nodejs 0.3.7+
+  quora                 11 Last n answers (per-user) from Quora; requires nodejs 0.3.7+
   econlib                1 Latest articles from econlib.org
 
 

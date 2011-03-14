@@ -31,9 +31,9 @@ spec = Gem::Specification.new {|i|
   i.extra_rdoc_files = FileList['doc/*.rdoc']
 
   i.add_dependency('open4', '>=  1.0.1')
-  i.add_dependency('activesupport', '>= 3.0.3')
+  i.add_dependency('activesupport', '>= 3.0.5')
   i.add_dependency('nokogiri', '>=  1.4.4')
-  i.add_dependency('jsonschema', '>= 2.0.0')
+  i.add_dependency('jsonschema', '>= 2.0.1')
 
   i.add_development_dependency('git', '>= 1.2.5')
 }

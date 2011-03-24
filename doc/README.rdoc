@@ -1,15 +1,15 @@
 = About
 
-bwkfanboy is a HTML to Atom feed converter that you can use to watch
-sites that do not provide its own feed.
+bwkfanboy is a converter from a raw HTML to an Atom feed. You can use it
+to watch sites that do not provide its own feed.
 
 The converter is not a magick tool: you'll need to write a plugin (in
-Ruby) for each site you want to watch. bwkfanboy provides guidelines and
+Ruby) for each site you want to watch. bwkfanboy gives guidelines and
 general assistance.
 
-Plugins from version 1.1.4 are *incompatible* with the 0.1.x
+(Plugins from version 1.1.4 are *incompatible* with the 0.1.x
 series. Please reread in doc/plugin.rdoc the example of the skeleton
-plugin.
+plugin.)
 
 = Included Plugins
 
@@ -17,7 +17,7 @@ plugin.
 
   bwk                    2 Brian Kernighan's articles from Daily Princetonian
   freebsd-ports-update   3 News from FreeBSD ports
-  quora                 11 Last n answers (per-user) from Quora; requires nodejs 0.3.7+
+  quora                 12 Last n answers (per-user) from Quora; requires nodejs 0.3.7+
   econlib                1 Latest articles from econlib.org
 
 
@@ -37,8 +37,6 @@ file and run:
 
   # gem install -l /where/is/your/bwkfanboy-x.y.z.gem
 
-If even this doesn't help, drop me a email.
-
 = Architecture
 
 == Plugins
@@ -54,7 +52,7 @@ or user's home
 
   ~/.bwkfanboy/plugins
 
-directories.
+directory.
 
 == Pipeline
 
@@ -62,29 +60,29 @@ The program consists of 4 parts:
 
 0. *bwkfanboy* script that takes 1 parameter: the name of a file in
    plugins directories (without the .rb suffix). So, for example to get
-   an atom feed from dailyprincetonian.com you type:
+   an atom feed from dailyprincetonian.com, you type:
 
      % bwkfanboy bwk
 
    and it will load
    <tt>/usr/local/lib/ruby/gems/1.9/gems/bwkfanboy-0.0.1/lib/bwkfanboy/plugins/bwk.rb</tt>
-   file on my FreeBSD machine, fetch and parse html from
+   file on my FreeBSD machine, fetch and parse the html from
    dailyprincetonian.com and generate the required feed, dumping it to
    stdout.
 
-   The script is just a convinient wrapper for 3 separate utils.
+   The script is just a convenient wrapper for 3 separate utils.
 
 1. *bwkfanboy_fetch*
 
-   It reads 1 line from stdin for the URL to fetch from. The result will
-   be dumped to stdout.
+   Reads 1 line from stdin for the URL to fetch from. The result will be
+   dumped to stdout.
 
 2. *bwkfanboy_parse*
 
-   It takes 1 parameter: <em>a full path</em> to a plugin file.
+   Takes 1 parameter: <em>a full path</em> to a plugin file.
 
-   This util reads stdin expecting it to be a xhtml, parses it and dumps
-   the result to stdout in JSON-formatted object.
+   This util reads stdin, expecting it to be a xhtml, parses it and
+   dumps the result to stdout in JSON-formatted object.
 
 3. *bwkfanboy_generate*
 

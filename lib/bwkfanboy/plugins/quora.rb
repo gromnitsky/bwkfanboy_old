@@ -15,7 +15,7 @@ class Page < Bwkfanboy::Parse
     URI = 'http://www.quora.com/#{opt[0]}/answers'
     URI_DEBUG = '/home/alex/lib/software/alex/bwkfanboy/test/semis/quora.html'
     ENC = 'UTF-8'
-    VERSION = 11
+    VERSION = 12
     COPYRIGHT = "See bwkfanboy's LICENSE file"
     TITLE = "Last n answers (per-user) from Quora; requires nodejs 0.3.7+"
     CONTENT_TYPE = 'html'

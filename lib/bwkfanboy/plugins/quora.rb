@@ -15,7 +15,7 @@ class Page < Bwkfanboy::Parse
     URI = 'http://www.quora.com/#{opt[0]}/answers'
     URI_DEBUG = '/home/alex/lib/software/alex/bwkfanboy/test/semis/quora.html'
     ENC = 'UTF-8'
-    VERSION = 12
+    VERSION = 13
     COPYRIGHT = "See bwkfanboy's LICENSE file"
     TITLE = "Last n answers (per-user) from Quora; requires nodejs 0.3.7+"
     CONTENT_TYPE = 'html'
@@ -70,7 +70,7 @@ class Page < Bwkfanboy::Parse
       
       c = i.xpath("../div[@class='hidden expanded_q_text']/div").inner_html(encoding: Meta::ENC)
       if c == ''
-        c = i.xpath("../../div/div/div")
+        c = i.xpath("../../div/div/div/div[3]")
         c.xpath("div").each {|j| j.remove() }
         c = c.inner_html(encoding: Meta::ENC)
       end

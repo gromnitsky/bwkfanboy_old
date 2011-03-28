@@ -32,7 +32,7 @@ module MyDocs
 end
 
 namespace 'mydocs' do
-  rule '.rdoc' => ['.erb'] do |i|
+  rule '.rdoc' => ['.erb', MyDocs::PLUGINS_DIR.to_s] do |i|
     File.open(i.name, 'w+') {|fp|
       puts i.source.pathmap('%-1d/%f') + ' > ' + i.name.pathmap('%-1d/%f')
       fp.puts ERB.new(File.read(i.source)).result(binding)

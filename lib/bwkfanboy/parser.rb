@@ -56,13 +56,14 @@ module Bwkfanboy
       }
       
       m = get_meta()
+      uri = eval("\"#{m::URI}\"")
       j = {
         channel: {
           updated: u,
-          id: m::URI,
+          id: uri,
           author: Meta::NAME,   # just a placeholder
           title: m::TITLE,
-          link: m::URI,
+          link: uri,
           x_entries_content_type: m::CONTENT_TYPE
         },
         x_entries: @entries

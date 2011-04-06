@@ -25,19 +25,20 @@ class TestServer < MiniTest::Unit::TestCase
     assert_raises(OpenURI::HTTPError) { open("http://#{ADDR}:#{@port}") }
     assert_raises(OpenURI::HTTPError) { open("http://#{ADDR}:#{@port}/?p=INVALID") }
     # 'o' is missing
-    assert_raises(OpenURI::HTTPError) { open("http://#{ADDR}:#{@port}/?p=quora") }
+    assert_raises(OpenURI::HTTPError) { open("http://#{ADDR}:#{@port}/?p=inc") }
   end
 
-  def test_right_plugin
-    r = ''
-    open("http://#{ADDR}:#{@port}/?p=bwk") { |f| r = f.read }
-    # wget -q -O - 127.0.0.1:9042/\?p=bwk | md5
-    assert_equal('64186fac2c52e5a969ad5675b9cc95ed', Digest::MD5.hexdigest(r))
-
-    r = ''
-    open("http://#{ADDR}:#{@port}/?p=quora&o=foo") { |f| r = f.read }
-    # bin/bwkfanboy_server -Dd
-    # wget -q -O - '127.0.0.1:9042/\?p=quora&o=foo' | md5
-    assert_equal('0f3f6607768392d69d15621eee815ab3', Digest::MD5.hexdigest(r))
+  def test_right_plugins
+    plugins = {
+      'bwk' => '64186fac2c52e5a969ad5675b9cc95ed',
+      'econlib' => '11f6114a9ab54d6ec67a26cbd76f5260',
+      'inc' => '13dae248c81dd6407ff327dd5575f8b5',
+    }
+    plugins.each {|k,v|
+      r = ''
+      open("http://#{ADDR}:#{@port}/?p=#{k}&o=foo") { |f| r = f.read }
+      # wget -q -O - '127.0.0.1:9042/?p=inc&o=foo' | md5
+      assert_equal(v, Digest::MD5.hexdigest(r))
+    }
   end
 end

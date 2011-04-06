@@ -105,6 +105,7 @@ case $conf[:mode]
 when 'template'
   require 'erb'
   require 'digest/md5'
+  require 'etc'
 
   t = ERB.new(File.read($conf[:skeleton]))
   t.filename = $conf[:skeleton] # to report errors relative to this file

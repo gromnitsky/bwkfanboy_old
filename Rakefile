@@ -12,7 +12,7 @@ require_relative 'doc/rakefile'
 
 spec = Gem::Specification.new {|i|
   i.name = "bwkfanboy"
-  i.summary = 'A converter from HTML to Atom feed that you can use to watch sites that do not provide its own feed.'
+  i.summary = "#{i.name} is a converter from a raw HTML to an Atom feed. You can use it to watch sites that do not provide its own feed."
   i.description = i.summary
   i.version = `bin/#{i.name} -V`
   i.author = 'Alexander Gromnitsky'
@@ -23,7 +23,6 @@ spec = Gem::Specification.new {|i|
   i.files = git_ls('.')
 
   i.executables = FileList['bin/*'].gsub(/^bin\//, '')
-  i.default_executable = i.name
 
   i.test_files = FileList['test/test_*.rb']
 

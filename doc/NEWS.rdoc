@@ -1,3 +1,10 @@
+=== 1.4.1
+
+Wed Apr 20 21:12:16 EEST 2011
+
+- Repackage under RVM due to a strange bug (in native FreeBSD ruby +
+  rubygems 1.7.2) with a date in the generated gem.
+
 === 1.4.0
 
 Wed Apr  6 23:45:39 EEST 2011

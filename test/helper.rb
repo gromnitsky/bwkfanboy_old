@@ -5,12 +5,7 @@ include FileUtils
 require_relative '../lib/bwkfanboy/utils'
 include Bwkfanboy
 
-# don't run tests automatically if they were invoked as 'gem check -t ...'
-if $0 =~ /gem/
-  require 'minitest/unit'
-else
-  require 'minitest/autorun'
-end
+require 'minitest/autorun'
 
 # Return the right directory for (probably executable) _c_.
 def cmd(c)
@@ -18,6 +13,7 @@ def cmd(c)
   when Meta::NAME.downcase
     # test probably is executed from the Rakefile
     Dir.chdir('test')
+    STDERR.puts('!!!!!!!!!!!!!! chdir to test ' + Dir.pwd)
   when 'test'
     # we are in the test directory, there is nothing special to do
   else

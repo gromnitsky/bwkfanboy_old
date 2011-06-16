@@ -1,11 +1,12 @@
 # -*-ruby-*-
 
 require 'rake'
-require 'rake/gempackagetask'
 require 'rake/clean'
-require 'rake/rdoctask'
 require 'rake/testtask'
-require 'json'
+require 'rubygems/package_task'
+
+gem 'rdoc'
+require 'rdoc/task'
 
 require_relative 'test/rake_git'
 require_relative 'doc/rakefile'
@@ -30,14 +31,14 @@ spec = Gem::Specification.new {|i|
   i.extra_rdoc_files = FileList['doc/*.rdoc']
 
   i.add_dependency('open4', '>=  1.0.1')
-  i.add_dependency('activesupport', '>= 3.0.5')
-  i.add_dependency('nokogiri', '>=  1.4.4')
+  i.add_dependency('activesupport', '>= 3.0.9')
+  i.add_dependency('nokogiri', '>=  1.4.5')
   i.add_dependency('jsonschema', '>= 2.0.1')
 
   i.add_development_dependency('git', '>= 1.2.5')
 }
 
-Rake::GemPackageTask.new(spec).define
+Gem::PackageTask.new(spec).define
 
 task gen_mydocs: ['mydocs:default'] do
   spec.extra_rdoc_files.concat(MyDocs::RDOC_RELATIVE)
@@ -47,7 +48,7 @@ task default: [:gen_mydocs, :repackage]
 task doc: [:gen_mydocs, :rdoc]
 task clobber: ['mydocs:clean']
 
-Rake::RDocTask.new do |i|
+RDoc::Task.new do |i|
   i.rdoc_files = FileList['doc/*', 'lib/**/*.rb']
   i.rdoc_files.exclude("lib/**/plugins")
   i.main = 'doc/README.rdoc'
@@ -55,5 +56,5 @@ end
 
 Rake::TestTask.new do |i|
   i.test_files = FileList['test/test_*.rb']
-  i.libs << '.'
+  i.verbose = true
 end

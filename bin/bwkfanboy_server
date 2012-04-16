@@ -6,6 +6,8 @@ require 'webrick'
 require 'date'
 require_relative '../lib/bwkfanboy/utils'
 
+Encoding.default_external = 'UTF-8'
+
 $conf = {
   addr: '127.0.0.1',
   port: 9042,
@@ -105,19 +107,27 @@ def log_create(f)
   log
 end
 
-# ----------------------------------------------------------------------
+
+###
 
 server_log = log_create($conf[:log])
 access_log = [[ log_create($conf[:alog]), WEBrick::AccessLog::COMBINED_LOG_FORMAT ]]
 
-s = WEBrick::HTTPServer.new(Port: $conf[:port],
-                            BindAddress: $conf[:addr],
-                            ServerType: $conf[:server_type],
-                            StartCallback: -> {start_callback},
-                            StopCallback: -> {stop_callback},
-                            Logger: server_log,
-                            AccessLog: access_log
-                            )
+begin
+  s = WEBrick::HTTPServer.new(Port: $conf[:port],
+                              BindAddress: $conf[:addr],
+                              ServerType: $conf[:server_type],
+                              StartCallback: -> {start_callback},
+                              StopCallback: -> {stop_callback},
+                              Logger: server_log,
+                              AccessLog: access_log)
+rescue Errno::EADDRINUSE
+  Bwkfanboy::Utils.warnx "already loaded"
+  exit 1
+rescue
+  Bwkfanboy::Utils.errx 1, $!.to_s
+end
+
 s.mount("/", FeedServlet)
 s.mount("/list", FeedListServlet)
 ['TERM', 'INT'].each {|i|

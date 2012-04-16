@@ -1,7 +1,11 @@
 -*-org-*-
 
-- Add plugin listing to _server.
-- Several http requests to _fetch.
-+ Inject falsework template.
-+ econlib.org articles plugin.
-- Rewrite Utils module to be more compatible with falsework.
+* Next version
+
+- [ ] Rewrite Utils module to use falsework
+- [ ] Move logs to $HOME/.bwkfanboy/log
+- [ ] Several http requests for _fetch
+
+** _server
+- [ ] Use API, not popen
+- [ ] pidfile lock

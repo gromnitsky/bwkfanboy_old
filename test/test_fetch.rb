@@ -16,7 +16,6 @@ class TestFetch < MiniTest::Unit::TestCase
   def test_invalid_url
     r = Utils.cmd_run("echo 'http://invalid.hostname.qwerty' | #{@cmd}")
     assert_equal(1, r[0])
-    assert_match(/504 Host .+ lookup failed: Host not found/, r[1])
   end
 
   def test_local_file
